@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" width="240" height="160">
+  
+  
+  
+<defs><filter id="stouch-0dj0t6-filter-0" color-interpolation-filters="sRGB"><feConvolveMatrix in="SourceGraphic" order="3" divisor="1" bias="0.5" preserveAlpha="true" kernelMatrix="1.9799 0.9899 0 0.9899 0 -0.9899 0 -0.9899 -1.9799" result="stouch-0dj0t6-emboss-relief-0"/><feColorMatrix in="stouch-0dj0t6-emboss-relief-0" type="saturate" values="0" result="stouch-out-0"/></filter></defs><g filter="url(#stouch-0dj0t6-filter-0)"><circle cx="88" cy="80" r="38" fill="#f25c54"/><rect x="130" y="46" width="68" height="68" rx="10" fill="#4cc9f0"/><path d="M40 132 L120 132 L80 40 Z" fill="none" stroke="#ffd166" stroke-width="6" stroke-linejoin="round"/></g></svg>

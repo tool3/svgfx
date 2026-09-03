@@ -1,0 +1,5 @@
+node_modules
+dist
+examples/gallery.html
+*.tsbuildinfo
+.DS_Store
