@@ -173,12 +173,67 @@ stouch(source, [neon({ color: '#4cc9f0' })])
 
 Every effect and preset ships as a runnable TypeScript script under
 [`examples/`](examples), each one writing a before/after pair into `examples/svgs`.
+They run as-is — no build step, nothing to compile first.
 
 ```bash
 npm run examples                    # render all 37
 node examples/effects/halftone.ts   # or just one
 npm run gallery                     # side-by-side overview page
 ```
+
+### Effect examples
+
+| Example | Call | Output |
+| ------- | ---- | ------ |
+| [`blur`](examples/effects/blur.ts) | `blur({ radius: 4 })` | [before](examples/svgs/blur.before.svg) · [after](examples/svgs/blur.after.svg) |
+| [`bloom`](examples/effects/bloom.ts) | `bloom({ radius: 8, threshold: 0.5 })` | [before](examples/svgs/bloom.before.svg) · [after](examples/svgs/bloom.after.svg) |
+| [`glow`](examples/effects/glow.ts) | `glow({ color: '#ff2d55', radius: 8, intensity: 1.5 })` | [before](examples/svgs/glow.before.svg) · [after](examples/svgs/glow.after.svg) |
+| [`shadow`](examples/effects/shadow.ts) | `shadow({ x: 6, y: 8, blur: 6, opacity: 0.55 })` | [before](examples/svgs/shadow.before.svg) · [after](examples/svgs/shadow.after.svg) |
+| [`grayscale`](examples/effects/grayscale.ts) | `grayscale()` | [before](examples/svgs/grayscale.before.svg) · [after](examples/svgs/grayscale.after.svg) |
+| [`saturate`](examples/effects/saturate.ts) | `saturate({ amount: 2.2 })` | [before](examples/svgs/saturate.before.svg) · [after](examples/svgs/saturate.after.svg) |
+| [`hue-rotate`](examples/effects/hue-rotate.ts) | `hueRotate({ angle: 140 })` | [before](examples/svgs/hue-rotate.before.svg) · [after](examples/svgs/hue-rotate.after.svg) |
+| [`invert`](examples/effects/invert.ts) | `invert()` | [before](examples/svgs/invert.before.svg) · [after](examples/svgs/invert.after.svg) |
+| [`brightness`](examples/effects/brightness.ts) | `brightness({ amount: 1.35 })` | [before](examples/svgs/brightness.before.svg) · [after](examples/svgs/brightness.after.svg) |
+| [`contrast`](examples/effects/contrast.ts) | `contrast({ amount: 1.7 })` | [before](examples/svgs/contrast.before.svg) · [after](examples/svgs/contrast.after.svg) |
+| [`sepia`](examples/effects/sepia.ts) | `sepia()` | [before](examples/svgs/sepia.before.svg) · [after](examples/svgs/sepia.after.svg) |
+| [`fade`](examples/effects/fade.ts) | `fade({ amount: 0.45 })` | [before](examples/svgs/fade.before.svg) · [after](examples/svgs/fade.after.svg) |
+| [`posterize`](examples/effects/posterize.ts) | `posterize({ steps: 4 })` | [before](examples/svgs/posterize.before.svg) · [after](examples/svgs/posterize.after.svg) |
+| [`threshold`](examples/effects/threshold.ts) | `threshold({ level: 0.5, dark: '#101010', light: '#f6f4ef' })` | [before](examples/svgs/threshold.before.svg) · [after](examples/svgs/threshold.after.svg) |
+| [`duotone`](examples/effects/duotone.ts) | `duotone({ shadow: '#111d4a', highlight: '#ffd166' })` | [before](examples/svgs/duotone.before.svg) · [after](examples/svgs/duotone.after.svg) |
+| [`tint`](examples/effects/tint.ts) | `tint({ color: '#00f5d4', amount: 0.5 })` | [before](examples/svgs/tint.before.svg) · [after](examples/svgs/tint.after.svg) |
+| [`grain`](examples/effects/grain.ts) | `grain({ amount: 0.5 })` | [before](examples/svgs/grain.before.svg) · [after](examples/svgs/grain.after.svg) |
+| [`scanlines`](examples/effects/scanlines.ts) | `scanlines({ gap: 3, thickness: 1.2, opacity: 0.35 })` | [before](examples/svgs/scanlines.before.svg) · [after](examples/svgs/scanlines.after.svg) |
+| [`chromatic-aberration`](examples/effects/chromatic-aberration.ts) | `chromaticAberration({ offset: 4 })` | [before](examples/svgs/chromatic-aberration.before.svg) · [after](examples/svgs/chromatic-aberration.after.svg) |
+| [`glitch`](examples/effects/glitch.ts) | `glitch({ intensity: 0.8, slices: 10 })` | [before](examples/svgs/glitch.before.svg) · [after](examples/svgs/glitch.after.svg) |
+| [`pixelate`](examples/effects/pixelate.ts) | `pixelate({ size: 10 })` | [before](examples/svgs/pixelate.before.svg) · [after](examples/svgs/pixelate.after.svg) |
+| [`halftone`](examples/effects/halftone.ts) | `halftone({ size: 5, angle: 15 })` | [before](examples/svgs/halftone.before.svg) · [after](examples/svgs/halftone.after.svg) |
+| [`vignette`](examples/effects/vignette.ts) | `vignette({ amount: 0.8, radius: 0.5 })` | [before](examples/svgs/vignette.before.svg) · [after](examples/svgs/vignette.after.svg) |
+| [`outline`](examples/effects/outline.ts) | `outline({ width: 3, color: '#f7f7f2' })` | [before](examples/svgs/outline.before.svg) · [after](examples/svgs/outline.after.svg) |
+| [`wave`](examples/effects/wave.ts) | `wave({ amplitude: 16, frequency: 0.03 })` | [before](examples/svgs/wave.before.svg) · [after](examples/svgs/wave.after.svg) |
+| [`emboss`](examples/effects/emboss.ts) | `emboss({ depth: 1.4 })` | [before](examples/svgs/emboss.before.svg) · [after](examples/svgs/emboss.after.svg) |
+| [`sharpen`](examples/effects/sharpen.ts) | `sharpen({ amount: 4 })` | [before](examples/svgs/sharpen.before.svg) · [after](examples/svgs/sharpen.after.svg) |
+
+### Preset examples
+
+| Example | Call | Output |
+| ------- | ---- | ------ |
+| [`crt`](examples/presets/crt.ts) | `crt()` | [before](examples/svgs/crt.before.svg) · [after](examples/svgs/crt.after.svg) |
+| [`cyberpunk`](examples/presets/cyberpunk.ts) | `cyberpunk()` | [before](examples/svgs/cyberpunk.before.svg) · [after](examples/svgs/cyberpunk.after.svg) |
+| [`film`](examples/presets/film.ts) | `film()` | [before](examples/svgs/film.before.svg) · [after](examples/svgs/film.after.svg) |
+| [`neon`](examples/presets/neon.ts) | `neon({ color: '#4cc9f0' })` | [before](examples/svgs/neon.before.svg) · [after](examples/svgs/neon.after.svg) |
+| [`newsprint`](examples/presets/newsprint.ts) | `newsprint()` | [before](examples/svgs/newsprint.before.svg) · [after](examples/svgs/newsprint.after.svg) |
+| [`riso`](examples/presets/riso.ts) | `riso({ shadow: '#2b3a67', highlight: '#ff5a5f' })` | [before](examples/svgs/riso.before.svg) · [after](examples/svgs/riso.after.svg) |
+| [`vhs`](examples/presets/vhs.ts) | `vhs()` | [before](examples/svgs/vhs.before.svg) · [after](examples/svgs/vhs.after.svg) |
+| [`xerox`](examples/presets/xerox.ts) | `xerox()` | [before](examples/svgs/xerox.before.svg) · [after](examples/svgs/xerox.after.svg) |
+
+### Animated examples
+
+Applied to `examples/sources/motion.svg`, which loops on its own in plain SMIL.
+
+| Example | What it shows | Output |
+| ------- | ------------- | ------ |
+| [`motion-crt`](examples/animated/preset-over-motion.ts) | `crt()` over a moving drawing | [before](examples/svgs/motion-crt.before.svg) · [after](examples/svgs/motion-crt.after.svg) |
+| [`motion-layered`](examples/animated/layered-motion.ts) | The drawing's own motion plus animated glitch, scanlines and grain | [before](examples/svgs/motion-layered.before.svg) · [after](examples/svgs/motion-layered.after.svg) |
 
 ## Motion
 
@@ -217,7 +272,7 @@ const banner = stouch(spinner, [
 ])
 ```
 
-See [`examples/animated`](examples/animated) for both, rendered from a looping source.
+Both are in the [animated examples](#animated-examples) above, rendered from a looping source.
 
 ## Writing your own effect
 
