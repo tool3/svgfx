@@ -41,13 +41,13 @@ export const riso = ({ shadow = '#2b3a67', highlight = '#ff5a5f' }: RisoOptions 
   compose('riso', [
     duotone({ shadow, highlight }),
     posterize({ steps: 4 }),
-    grain({ amount: 0.42, size: 1.4, blend: 'multiply' }),
+    grain({ amount: 0.4, size: 1.4 }),
   ])
 
 export const xerox = (): Effect =>
   compose('xerox', [
     threshold({ level: 0.56, dark: '#101010', light: '#f6f4ef' }),
-    grain({ amount: 0.5, size: 1.6, blend: 'multiply' }),
+    grain({ amount: 0.44, size: 1.7 }),
   ])
 
 export interface NeonOptions {
@@ -72,7 +72,7 @@ export const film = (): Effect =>
 export const newsprint = (): Effect =>
   compose('newsprint', [
     halftone({ size: 5, levels: 4, color: '#1c1c1c', background: '#f2ede2' }),
-    grain({ amount: 0.3, size: 1.5, blend: 'multiply' }),
+    grain({ amount: 0.28, size: 1.5 }),
   ])
 
 export const cyberpunk = ({ animate = false }: MotionOptions = {}): Effect =>

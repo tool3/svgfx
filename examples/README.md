@@ -31,61 +31,66 @@ so the examples run against your working copy without a build.
 
 | Path | Contents |
 | ---- | -------- |
-| `sources/` | The three input drawings: `scene.svg` (full-bleed art), `mark.svg` (shapes on transparency) and `motion.svg` (already animated) |
+| `sources/` | The four input drawings: `scene.svg` (full-bleed art), `mark.svg` (shapes on transparency), `tones.svg` (a full tonal range) and `motion.svg` (already animated) |
 | `effects/` | One script per effect |
 | `presets/` | One script per preset |
 | `animated/` | Effects applied to an SVG that already animates |
 | `svgs/` | Output — `<name>.before.svg` and `<name>.after.svg` for every example |
 | `support.ts` | `load` and `save` helpers, so each example stays about the effect |
 
-Effects that reshape edges or cast light — `glow`, `shadow`, `outline`, `emboss`,
-`pixelate`, `wave`, `fade`, `neon` — run against `mark.svg`, because they need
-transparency around the artwork to show what they do. The rest run against `scene.svg`.
+Each example runs against the source that shows it best:
 
-## Effects
+- `mark.svg` for effects that reshape edges or cast light — `glow`, `shadow`, `outline`,
+  `emboss`, `pixelate`, `wave`, `fade`, `neon` — because they need transparency around
+  the artwork to have somewhere to go.
+- `tones.svg` for effects that remap tone — `threshold`, `duotone`, `halftone`, `xerox`,
+  `newsprint` — because a white-to-black ramp and a shaded sphere show the mapping.
+- `scene.svg` for everything else.
 
-| Example | Call |
-| ------- | ---- |
-| [blur](effects/blur.ts) | `blur({ radius: 4 })` |
-| [bloom](effects/bloom.ts) | `bloom({ radius: 8, threshold: 0.5 })` |
-| [glow](effects/glow.ts) | `glow({ color: '#ff2d55', radius: 8, intensity: 1.5 })` |
-| [shadow](effects/shadow.ts) | `shadow({ x: 6, y: 8, blur: 6, opacity: 0.55 })` |
-| [grayscale](effects/grayscale.ts) | `grayscale()` |
-| [saturate](effects/saturate.ts) | `saturate({ amount: 2.2 })` |
-| [hue-rotate](effects/hue-rotate.ts) | `hueRotate({ angle: 140 })` |
-| [invert](effects/invert.ts) | `invert()` |
-| [brightness](effects/brightness.ts) | `brightness({ amount: 1.35 })` |
-| [contrast](effects/contrast.ts) | `contrast({ amount: 1.7 })` |
-| [sepia](effects/sepia.ts) | `sepia()` |
-| [fade](effects/fade.ts) | `fade({ amount: 0.45 })` |
-| [posterize](effects/posterize.ts) | `posterize({ steps: 4 })` |
-| [threshold](effects/threshold.ts) | `threshold({ level: 0.5, dark: '#101010', light: '#f6f4ef' })` |
-| [duotone](effects/duotone.ts) | `duotone({ shadow: '#111d4a', highlight: '#ffd166' })` |
-| [tint](effects/tint.ts) | `tint({ color: '#00f5d4', amount: 0.5 })` |
-| [grain](effects/grain.ts) | `grain({ amount: 0.5 })` |
-| [scanlines](effects/scanlines.ts) | `scanlines({ gap: 3, thickness: 1.2, opacity: 0.35 })` |
-| [chromatic-aberration](effects/chromatic-aberration.ts) | `chromaticAberration({ offset: 4 })` |
-| [glitch](effects/glitch.ts) | `glitch({ intensity: 0.8, slices: 10 })` |
-| [pixelate](effects/pixelate.ts) | `pixelate({ size: 10 })` |
-| [halftone](effects/halftone.ts) | `halftone({ size: 5, angle: 15 })` |
-| [vignette](effects/vignette.ts) | `vignette({ amount: 0.8, radius: 0.5 })` |
-| [outline](effects/outline.ts) | `outline({ width: 3, color: '#f7f7f2' })` |
-| [wave](effects/wave.ts) | `wave({ amplitude: 16, frequency: 0.03 })` |
-| [emboss](effects/emboss.ts) | `emboss({ depth: 1.4 })` |
-| [sharpen](effects/sharpen.ts) | `sharpen({ amount: 4 })` |
+### Effects
+
+| Example | Before | After |
+| ------- | ------ | ----- |
+| [`blur`](effects/blur.ts) | <img src="svgs/blur.before.svg" width="240" alt="blur before"> | <img src="svgs/blur.after.svg" width="240" alt="blur after"> |
+| [`bloom`](effects/bloom.ts) | <img src="svgs/bloom.before.svg" width="240" alt="bloom before"> | <img src="svgs/bloom.after.svg" width="240" alt="bloom after"> |
+| [`glow`](effects/glow.ts) | <img src="svgs/glow.before.svg" width="240" alt="glow before"> | <img src="svgs/glow.after.svg" width="240" alt="glow after"> |
+| [`shadow`](effects/shadow.ts) | <img src="svgs/shadow.before.svg" width="240" alt="shadow before"> | <img src="svgs/shadow.after.svg" width="240" alt="shadow after"> |
+| [`grayscale`](effects/grayscale.ts) | <img src="svgs/grayscale.before.svg" width="240" alt="grayscale before"> | <img src="svgs/grayscale.after.svg" width="240" alt="grayscale after"> |
+| [`saturate`](effects/saturate.ts) | <img src="svgs/saturate.before.svg" width="240" alt="saturate before"> | <img src="svgs/saturate.after.svg" width="240" alt="saturate after"> |
+| [`hue-rotate`](effects/hue-rotate.ts) | <img src="svgs/hue-rotate.before.svg" width="240" alt="hue-rotate before"> | <img src="svgs/hue-rotate.after.svg" width="240" alt="hue-rotate after"> |
+| [`invert`](effects/invert.ts) | <img src="svgs/invert.before.svg" width="240" alt="invert before"> | <img src="svgs/invert.after.svg" width="240" alt="invert after"> |
+| [`brightness`](effects/brightness.ts) | <img src="svgs/brightness.before.svg" width="240" alt="brightness before"> | <img src="svgs/brightness.after.svg" width="240" alt="brightness after"> |
+| [`contrast`](effects/contrast.ts) | <img src="svgs/contrast.before.svg" width="240" alt="contrast before"> | <img src="svgs/contrast.after.svg" width="240" alt="contrast after"> |
+| [`sepia`](effects/sepia.ts) | <img src="svgs/sepia.before.svg" width="240" alt="sepia before"> | <img src="svgs/sepia.after.svg" width="240" alt="sepia after"> |
+| [`fade`](effects/fade.ts) | <img src="svgs/fade.before.svg" width="240" alt="fade before"> | <img src="svgs/fade.after.svg" width="240" alt="fade after"> |
+| [`posterize`](effects/posterize.ts) | <img src="svgs/posterize.before.svg" width="240" alt="posterize before"> | <img src="svgs/posterize.after.svg" width="240" alt="posterize after"> |
+| [`threshold`](effects/threshold.ts) | <img src="svgs/threshold.before.svg" width="240" alt="threshold before"> | <img src="svgs/threshold.after.svg" width="240" alt="threshold after"> |
+| [`duotone`](effects/duotone.ts) | <img src="svgs/duotone.before.svg" width="240" alt="duotone before"> | <img src="svgs/duotone.after.svg" width="240" alt="duotone after"> |
+| [`tint`](effects/tint.ts) | <img src="svgs/tint.before.svg" width="240" alt="tint before"> | <img src="svgs/tint.after.svg" width="240" alt="tint after"> |
+| [`grain`](effects/grain.ts) | <img src="svgs/grain.before.svg" width="240" alt="grain before"> | <img src="svgs/grain.after.svg" width="240" alt="grain after"> |
+| [`scanlines`](effects/scanlines.ts) | <img src="svgs/scanlines.before.svg" width="240" alt="scanlines before"> | <img src="svgs/scanlines.after.svg" width="240" alt="scanlines after"> |
+| [`chromatic-aberration`](effects/chromatic-aberration.ts) | <img src="svgs/chromatic-aberration.before.svg" width="240" alt="chromatic-aberration before"> | <img src="svgs/chromatic-aberration.after.svg" width="240" alt="chromatic-aberration after"> |
+| [`glitch`](effects/glitch.ts) | <img src="svgs/glitch.before.svg" width="240" alt="glitch before"> | <img src="svgs/glitch.after.svg" width="240" alt="glitch after"> |
+| [`pixelate`](effects/pixelate.ts) | <img src="svgs/pixelate.before.svg" width="240" alt="pixelate before"> | <img src="svgs/pixelate.after.svg" width="240" alt="pixelate after"> |
+| [`halftone`](effects/halftone.ts) | <img src="svgs/halftone.before.svg" width="240" alt="halftone before"> | <img src="svgs/halftone.after.svg" width="240" alt="halftone after"> |
+| [`vignette`](effects/vignette.ts) | <img src="svgs/vignette.before.svg" width="240" alt="vignette before"> | <img src="svgs/vignette.after.svg" width="240" alt="vignette after"> |
+| [`outline`](effects/outline.ts) | <img src="svgs/outline.before.svg" width="240" alt="outline before"> | <img src="svgs/outline.after.svg" width="240" alt="outline after"> |
+| [`wave`](effects/wave.ts) | <img src="svgs/wave.before.svg" width="240" alt="wave before"> | <img src="svgs/wave.after.svg" width="240" alt="wave after"> |
+| [`emboss`](effects/emboss.ts) | <img src="svgs/emboss.before.svg" width="240" alt="emboss before"> | <img src="svgs/emboss.after.svg" width="240" alt="emboss after"> |
+| [`sharpen`](effects/sharpen.ts) | <img src="svgs/sharpen.before.svg" width="240" alt="sharpen before"> | <img src="svgs/sharpen.after.svg" width="240" alt="sharpen after"> |
 
 ## Presets
 
-| Example | Call |
-| ------- | ---- |
-| [crt](presets/crt.ts) | `crt()` |
-| [vhs](presets/vhs.ts) | `vhs()` |
-| [riso](presets/riso.ts) | `riso({ shadow: '#2b3a67', highlight: '#ff5a5f' })` |
-| [xerox](presets/xerox.ts) | `xerox()` |
-| [neon](presets/neon.ts) | `neon({ color: '#4cc9f0' })` |
-| [film](presets/film.ts) | `film()` |
-| [newsprint](presets/newsprint.ts) | `newsprint()` |
-| [cyberpunk](presets/cyberpunk.ts) | `cyberpunk()` |
+| Example | Before | After |
+| ------- | ------ | ----- |
+| [`crt`](presets/crt.ts) | <img src="svgs/crt.before.svg" width="240" alt="crt before"> | <img src="svgs/crt.after.svg" width="240" alt="crt after"> |
+| [`cyberpunk`](presets/cyberpunk.ts) | <img src="svgs/cyberpunk.before.svg" width="240" alt="cyberpunk before"> | <img src="svgs/cyberpunk.after.svg" width="240" alt="cyberpunk after"> |
+| [`film`](presets/film.ts) | <img src="svgs/film.before.svg" width="240" alt="film before"> | <img src="svgs/film.after.svg" width="240" alt="film after"> |
+| [`neon`](presets/neon.ts) | <img src="svgs/neon.before.svg" width="240" alt="neon before"> | <img src="svgs/neon.after.svg" width="240" alt="neon after"> |
+| [`newsprint`](presets/newsprint.ts) | <img src="svgs/newsprint.before.svg" width="240" alt="newsprint before"> | <img src="svgs/newsprint.after.svg" width="240" alt="newsprint after"> |
+| [`riso`](presets/riso.ts) | <img src="svgs/riso.before.svg" width="240" alt="riso before"> | <img src="svgs/riso.after.svg" width="240" alt="riso after"> |
+| [`vhs`](presets/vhs.ts) | <img src="svgs/vhs.before.svg" width="240" alt="vhs before"> | <img src="svgs/vhs.after.svg" width="240" alt="vhs after"> |
+| [`xerox`](presets/xerox.ts) | <img src="svgs/xerox.before.svg" width="240" alt="xerox before"> | <img src="svgs/xerox.after.svg" width="240" alt="xerox after"> |
 
 ## Already animated
 
@@ -93,10 +98,10 @@ transparency around the artwork to show what they do. The rest run against `scen
 sliding back and forth, a stroke dashing along a path, all in plain SMIL. Effects are
 applied to it without disturbing any of that.
 
-| Example | What it shows |
-| ------- | ------------- |
-| [preset-over-motion](animated/preset-over-motion.ts) | `crt()` over a moving drawing. The motion is untouched; the effect renders on every frame. |
-| [layered-motion](animated/layered-motion.ts) | The drawing's own motion plus stouch's — animated glitch, rolling scanlines and shifting grain on top of it. |
+| Example | Before | After |
+| ------- | ------ | ----- |
+| [`motion-crt`](animated/preset-over-motion.ts) | <img src="svgs/motion-crt.before.svg" width="240" alt="motion-crt before"> | <img src="svgs/motion-crt.after.svg" width="240" alt="motion-crt after"> |
+| [`motion-layered`](animated/layered-motion.ts) | <img src="svgs/motion-layered.before.svg" width="240" alt="motion-layered before"> | <img src="svgs/motion-layered.after.svg" width="240" alt="motion-layered after"> |
 
 Open `svgs/motion-crt.after.svg` or `svgs/motion-layered.after.svg` in a browser: one
 file, no JavaScript, everything moving.

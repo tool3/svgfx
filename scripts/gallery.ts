@@ -18,6 +18,8 @@ const mark = read('mark.svg')
 
 const motion = read('motion.svg')
 
+const tones = read('tones.svg')
+
 const sceneVariants: readonly Variant[] = [
   ['original', []],
   ['blur', [stouch.blur({ radius: 2 })]],
@@ -65,6 +67,17 @@ const markVariants: readonly Variant[] = [
   ['mark: glitch', [stouch.glitch({ intensity: 0.8, slices: 10 })]],
 ]
 
+const toneVariants: readonly Variant[] = [
+  ['tones: original', []],
+  ['tones: threshold', [stouch.threshold({ level: 0.62 })]],
+  ['tones: posterize', [stouch.posterize({ steps: 4 })]],
+  ['tones: duotone', [stouch.duotone()]],
+  ['tones: halftone', [stouch.halftone({ size: 5, angle: 15 })]],
+  ['tones: preset xerox', [stouch.xerox()]],
+  ['tones: preset newsprint', [stouch.newsprint()]],
+  ['tones: preset riso', [stouch.riso()]],
+]
+
 const motionVariants: readonly Variant[] = [
   ['motion: original', []],
   ['motion: crt', [stouch.crt()]],
@@ -109,6 +122,7 @@ const page = `<!doctype html>
 <h1>stouch — effect gallery</h1>
 ${section('Scene', sceneVariants.map(card(scene)))}
 ${section('Mark', markVariants.map(card(mark)))}
+${section('Tones', toneVariants.map(card(tones)))}
 ${section('Already animated', motionVariants.map(card(motion)))}
 </body>
 </html>
@@ -117,5 +131,5 @@ ${section('Already animated', motionVariants.map(card(motion)))}
 writeFileSync(join(here, '..', 'examples', 'gallery.html'), page)
 
 console.log(
-  `Wrote examples/gallery.html with ${sceneVariants.length + markVariants.length + motionVariants.length} variants.`,
+  `Wrote examples/gallery.html with ${sceneVariants.length + markVariants.length + toneVariants.length + motionVariants.length} variants.`,
 )
