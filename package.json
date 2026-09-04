@@ -1,11 +1,12 @@
 {
-  "name": "svgfx",
+  "name": "@svgfx/postprocessing",
   "version": "0.1.0",
   "description": "Post-processing effects for any SVG. Scanlines, bloom, glitch, halftone and more — in, out, still an SVG.",
   "keywords": [
     "svg",
-    "effects",
+    "postprocessing",
     "post-processing",
+    "effects",
     "filter",
     "glitch",
     "scanlines",
@@ -17,6 +18,9 @@
   "license": "MIT",
   "author": "Tal Hayut",
   "type": "module",
+  "publishConfig": {
+    "access": "public"
+  },
   "sideEffects": false,
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",

@@ -24,7 +24,7 @@ const output = svgfx(source, [halftone({ size: 5, angle: 15 })])
 save('halftone', source, output)
 ```
 
-In your own project that first import is `from 'svgfx'`; here it points at the source
+In your own project that first import is `from '@svgfx/postprocessing'`; here it points at the source
 so the examples run against your working copy without a build.
 
 ## Layout

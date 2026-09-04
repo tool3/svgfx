@@ -1,10 +1,10 @@
-# svgfx
+# @svgfx/postprocessing
 
 **Post-processing effects for any SVG.** Give it an SVG, get back an SVG — now with
 scanlines, bloom, glitch, halftone, duotone or a dozen other looks baked in.
 
 ```ts
-import { svgfx, scanlines, bloom } from 'svgfx'
+import { svgfx, scanlines, bloom } from '@svgfx/postprocessing'
 
 const output = svgfx(input, [bloom({ radius: 6 }), scanlines({ gap: 3 })])
 ```
@@ -25,14 +25,14 @@ const output = svgfx(input, [bloom({ radius: 6 }), scanlines({ gap: 3 })])
 ## Install
 
 ```bash
-npm install svgfx
+npm install @svgfx/postprocessing
 ```
 
 ## Quick start
 
 ```ts
 import { readFileSync, writeFileSync } from 'node:fs'
-import { svgfx, crt } from 'svgfx'
+import { svgfx, crt } from '@svgfx/postprocessing'
 
 const source = readFileSync('logo.svg', 'utf8')
 
@@ -42,7 +42,7 @@ writeFileSync('logo-crt.svg', svgfx(source, [crt()]))
 Effects are applied in order, exactly as you would stack them in an editor:
 
 ```ts
-import { svgfx, duotone, halftone, grain } from 'svgfx'
+import { svgfx, duotone, halftone, grain } from '@svgfx/postprocessing'
 
 const poster = svgfx(source, [
   duotone({ shadow: '#111d4a', highlight: '#ff6b6b' }),
@@ -66,7 +66,7 @@ const output = svgfx(source, [bloom()], { seed: 'hero', format: 'pretty' })
 A reusable, named stack of effects. Build it once, apply it to many files.
 
 ```ts
-import { createPipeline, duotone, grain } from 'svgfx'
+import { createPipeline, duotone, grain } from '@svgfx/postprocessing'
 
 const brand = createPipeline([duotone({ shadow: '#001427' }), grain()], { seed: 'brand' })
 
@@ -151,7 +151,7 @@ Every option is optional. `bloom()` on its own is tuned to look right.
 Finished looks, each one a `compose` of the effects above.
 
 ```ts
-import { crt, vhs, riso, xerox, neon, film, newsprint, cyberpunk } from 'svgfx'
+import { crt, vhs, riso, xerox, neon, film, newsprint, cyberpunk } from '@svgfx/postprocessing'
 
 svgfx(source, [crt({ animate: true })])
 svgfx(source, [riso({ shadow: '#2b3a67', highlight: '#ff5a5f' })])
@@ -284,7 +284,7 @@ into a single `<filter>` element automatically. A **layer stage** restructures t
 artwork — wrapping it, duplicating it, or laying something over it.
 
 ```ts
-import { defineEffect, filterStage, series } from 'svgfx'
+import { defineEffect, filterStage, series } from '@svgfx/postprocessing'
 
 export const solarize = ({ level = 0.5 } = {}) =>
   defineEffect('solarize', [
@@ -308,7 +308,7 @@ A layer stage receives the current artwork and returns the new artwork, plus any
 it needs in `<defs>` or in a `<style>` block:
 
 ```ts
-import { cover, defineEffect, group, layerStage } from 'svgfx'
+import { cover, defineEffect, group, layerStage } from '@svgfx/postprocessing'
 
 export const wash = ({ color = '#ff2d55' } = {}) =>
   defineEffect('wash', [
@@ -328,7 +328,7 @@ Randomness is keyed rather than sequential, which is what keeps output byte-stab
 
 ```tsx
 import { useMemo } from 'react'
-import { svgfx, crt } from 'svgfx'
+import { svgfx, crt } from '@svgfx/postprocessing'
 
 const Poster = ({ svg }: { svg: string }) => {
   const html = useMemo(() => svgfx(svg, [crt()]), [svg])
@@ -340,7 +340,7 @@ const Poster = ({ svg }: { svg: string }) => {
 
 ```js
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs'
-import { createPipeline, duotone, grain } from 'svgfx'
+import { createPipeline, duotone, grain } from '@svgfx/postprocessing'
 
 const brand = createPipeline([duotone(), grain()], { format: 'minify' })
 
