@@ -1,6 +1,6 @@
 {
   "name": "@svgfx/postprocessing",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Post-processing effects for any SVG. Scanlines, bloom, glitch, halftone and more — in, out, still an SVG.",
   "keywords": [
     "svg",
