@@ -1,8 +1,8 @@
-export { stouch, createPipeline, resolveSettings } from './core/api.ts'
+export { svgfx, createPipeline, resolveSettings } from './core/api.ts'
 export { toDataUri } from './core/data-uri.ts'
 export type { DataUriOptions } from './core/data-uri.ts'
-export { StouchError } from './core/errors.ts'
-export type { StouchErrorCode } from './core/errors.ts'
+export { SvgfxError } from './core/errors.ts'
+export type { SvgfxErrorCode } from './core/errors.ts'
 export { parse } from './core/parse.ts'
 export { serialize } from './core/serialize.ts'
 export { compose, defineEffect, filterStage, layerStage, isEffect } from './core/effect.ts'
@@ -57,7 +57,7 @@ export type {
   OutputFormat,
   Pipeline,
   ResolvedSettings,
-  StouchSettings,
+  SvgfxSettings,
   SvgAttributes,
   SvgComment,
   SvgDocument,

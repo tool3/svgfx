@@ -1,5 +1,5 @@
 {
-  "name": "stouch",
+  "name": "svgfx",
   "version": "0.1.0",
   "description": "Post-processing effects for any SVG. Scanlines, bloom, glitch, halftone and more — in, out, still an SVG.",
   "keywords": [

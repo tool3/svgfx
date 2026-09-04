@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { stouch } from '../src/core/api.ts'
+import { svgfx } from '../src/core/api.ts'
 import { blur } from '../src/effects/blur.ts'
 import { bloom } from '../src/effects/bloom.ts'
 import { glow } from '../src/effects/glow.ts'
@@ -34,7 +34,7 @@ import type { Effect } from '../src/core/types.ts'
 
 const SOURCE = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 60"><rect width="100" height="60"/></svg>'
 
-const apply = (effect: Effect): string => stouch(SOURCE, [effect], { seed: 'test' })
+const apply = (effect: Effect): string => svgfx(SOURCE, [effect], { seed: 'test' })
 
 const count = (haystack: string, needle: string): number => haystack.split(needle).length - 1
 
@@ -143,7 +143,7 @@ test('scanlines adds a tiled pattern overlay', () => {
 
 test('scanlines rolls with a self contained keyframe animation', () => {
   const output = apply(scanlines({ animate: true, gap: 4 }))
-  assert.match(output, /@keyframes stouch-[^{]+\{from\{transform:translateY\(0\)\}to\{transform:translateY\(4px\)\}\}/)
+  assert.match(output, /@keyframes svgfx-[^{]+\{from\{transform:translateY\(0\)\}to\{transform:translateY\(4px\)\}\}/)
 })
 
 test('scanlines rotates the pattern for angled lines', () => {
@@ -160,7 +160,7 @@ test('chromatic aberration splits and recombines the channels', () => {
 test('glitch slices the artwork into clipped bands', () => {
   const output = apply(glitch({ intensity: 1, slices: 8 }))
   assert.ok(count(output, '<clipPath') > 0)
-  assert.ok(count(output, '<use href="#stouch') > 0)
+  assert.ok(count(output, '<use href="#svgfx') > 0)
 })
 
 test('glitch can drop the colour shift', () => {

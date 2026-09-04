@@ -1,8 +1,8 @@
-import { stouch, posterize } from '../../src/index.ts'
+import { svgfx, posterize } from '../../src/index.ts'
 import { load, save } from '../support.ts'
 
 const source = load('scene.svg')
 
-const output = stouch(source, [posterize({ steps: 4 })])
+const output = svgfx(source, [posterize({ steps: 4 })])
 
 save('posterize', source, output)

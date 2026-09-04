@@ -1,9 +1,9 @@
-import { stouch, bloom, glitch, grain, scanlines } from '../../src/index.ts'
+import { svgfx, bloom, glitch, grain, scanlines } from '../../src/index.ts'
 import { load, save } from '../support.ts'
 
 const source = load('motion.svg')
 
-const output = stouch(
+const output = svgfx(
   source,
   [
     bloom({ radius: 6, threshold: 0.45 }),

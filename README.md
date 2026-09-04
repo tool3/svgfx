@@ -1,12 +1,12 @@
-# stouch
+# svgfx
 
 **Post-processing effects for any SVG.** Give it an SVG, get back an SVG — now with
 scanlines, bloom, glitch, halftone, duotone or a dozen other looks baked in.
 
 ```ts
-import { stouch, scanlines, bloom } from 'stouch'
+import { svgfx, scanlines, bloom } from 'svgfx'
 
-const output = stouch(input, [bloom({ radius: 6 }), scanlines({ gap: 3 })])
+const output = svgfx(input, [bloom({ radius: 6 }), scanlines({ gap: 3 })])
 ```
 
 - **Vector in, vector out.** No canvas, no rasterizing, no `<image>` payloads. The
@@ -25,26 +25,26 @@ const output = stouch(input, [bloom({ radius: 6 }), scanlines({ gap: 3 })])
 ## Install
 
 ```bash
-npm install stouch
+npm install svgfx
 ```
 
 ## Quick start
 
 ```ts
 import { readFileSync, writeFileSync } from 'node:fs'
-import { stouch, crt } from 'stouch'
+import { svgfx, crt } from 'svgfx'
 
 const source = readFileSync('logo.svg', 'utf8')
 
-writeFileSync('logo-crt.svg', stouch(source, [crt()]))
+writeFileSync('logo-crt.svg', svgfx(source, [crt()]))
 ```
 
 Effects are applied in order, exactly as you would stack them in an editor:
 
 ```ts
-import { stouch, duotone, halftone, grain } from 'stouch'
+import { svgfx, duotone, halftone, grain } from 'svgfx'
 
-const poster = stouch(source, [
+const poster = svgfx(source, [
   duotone({ shadow: '#111d4a', highlight: '#ff6b6b' }),
   halftone({ size: 5, angle: 15 }),
   grain({ amount: 0.4 }),
@@ -53,12 +53,12 @@ const poster = stouch(source, [
 
 ## API
 
-### `stouch(source, effects?, settings?)`
+### `svgfx(source, effects?, settings?)`
 
 Takes an SVG string, returns an SVG string.
 
 ```ts
-const output = stouch(source, [bloom()], { seed: 'hero', format: 'pretty' })
+const output = svgfx(source, [bloom()], { seed: 'hero', format: 'pretty' })
 ```
 
 ### `createPipeline(effects, settings?)`
@@ -66,7 +66,7 @@ const output = stouch(source, [bloom()], { seed: 'hero', format: 'pretty' })
 A reusable, named stack of effects. Build it once, apply it to many files.
 
 ```ts
-import { createPipeline, duotone, grain } from 'stouch'
+import { createPipeline, duotone, grain } from 'svgfx'
 
 const brand = createPipeline([duotone({ shadow: '#001427' }), grain()], { seed: 'brand' })
 
@@ -85,7 +85,7 @@ export const houseStyle = compose('house-style', [contrast({ amount: 1.1 }), gra
 ### `toDataUri(svg, options?)`
 
 ```ts
-element.style.backgroundImage = `url("${toDataUri(stouch(source, [crt()]))}")`
+element.style.backgroundImage = `url("${toDataUri(svgfx(source, [crt()]))}")`
 ```
 
 URI-encoded by default (smaller and readable); pass `{ base64: true }` if you need it.
@@ -94,9 +94,9 @@ URI-encoded by default (smaller and readable); pass `{ base64: true }` if you ne
 
 | Setting   | Default      | What it does |
 | --------- | ------------ | ------------ |
-| `seed`    | `'stouch'`   | Seeds every random decision. Change it to reroll a glitch or a grain field; keep it to get the same output forever. |
-| `prefix`  | `'stouch'`   | Prefix for every generated id and class. |
-| `scope`   | auto         | Id namespace. Derived from the source, seed and effects so several stouch outputs can be inlined in one page without colliding. Set it yourself for stable, readable ids. |
+| `seed`    | `'svgfx'`   | Seeds every random decision. Change it to reroll a glitch or a grain field; keep it to get the same output forever. |
+| `prefix`  | `'svgfx'`   | Prefix for every generated id and class. |
+| `scope`   | auto         | Id namespace. Derived from the source, seed and effects so several svgfx outputs can be inlined in one page without colliding. Set it yourself for stable, readable ids. |
 | `animate` | `true`       | Global switch for motion. `false` strips animation from every effect that asked for it — useful for print, PDF or snapshot tests. |
 | `format`  | `'preserve'` | `'preserve'` keeps the input's whitespace, `'pretty'` re-indents, `'minify'` drops comments and layout whitespace. |
 
@@ -151,11 +151,11 @@ Every option is optional. `bloom()` on its own is tuned to look right.
 Finished looks, each one a `compose` of the effects above.
 
 ```ts
-import { crt, vhs, riso, xerox, neon, film, newsprint, cyberpunk } from 'stouch'
+import { crt, vhs, riso, xerox, neon, film, newsprint, cyberpunk } from 'svgfx'
 
-stouch(source, [crt({ animate: true })])
-stouch(source, [riso({ shadow: '#2b3a67', highlight: '#ff5a5f' })])
-stouch(source, [neon({ color: '#4cc9f0' })])
+svgfx(source, [crt({ animate: true })])
+svgfx(source, [riso({ shadow: '#2b3a67', highlight: '#ff5a5f' })])
+svgfx(source, [neon({ color: '#4cc9f0' })])
 ```
 
 | Preset | Look |
@@ -230,7 +230,7 @@ npm run gallery                     # side-by-side overview page
 ### Animated examples
 
 Applied to `examples/sources/motion.svg`, which loops on its own in plain SMIL. Both
-columns are playing: the source keeps its motion, and the second adds stouch's on top.
+columns are playing: the source keeps its motion, and the second adds svgfx's on top.
 
 | Example | Before | After |
 | ------- | ------ | ----- |
@@ -244,13 +244,13 @@ keyframes into the output. Nothing is attached at runtime, so the file animates 
 own — as an `<img src>`, a CSS `background-image`, or inlined in a page.
 
 ```ts
-const banner = stouch(source, [scanlines({ animate: true, speed: 4 }), grain({ animate: true })])
+const banner = svgfx(source, [scanlines({ animate: true, speed: 4 }), grain({ animate: true })])
 ```
 
 Turn all of it off in one place when you need a still frame:
 
 ```ts
-stouch(source, [crt({ animate: true })], { animate: false })
+svgfx(source, [crt({ animate: true })], { animate: false })
 ```
 
 ### Animated SVGs go in, animated SVGs come out
@@ -260,13 +260,13 @@ An input that already animates keeps animating. `<animate>`, `<animateTransform>
 wrapped, never rewritten — and the effect is applied to every frame as it plays.
 
 ```ts
-const styled = stouch(spinner, [crt()])
+const styled = svgfx(spinner, [crt()])
 ```
 
-Your motion and stouch's motion compose, in one self-contained file:
+Your motion and svgfx's motion compose, in one self-contained file:
 
 ```ts
-const banner = stouch(spinner, [
+const banner = svgfx(spinner, [
   bloom({ radius: 6, threshold: 0.45 }),
   glitch({ intensity: 0.6, animate: true }),
   scanlines({ gap: 3, animate: true }),
@@ -284,7 +284,7 @@ into a single `<filter>` element automatically. A **layer stage** restructures t
 artwork — wrapping it, duplicating it, or laying something over it.
 
 ```ts
-import { defineEffect, filterStage, series } from 'stouch'
+import { defineEffect, filterStage, series } from 'svgfx'
 
 export const solarize = ({ level = 0.5 } = {}) =>
   defineEffect('solarize', [
@@ -308,7 +308,7 @@ A layer stage receives the current artwork and returns the new artwork, plus any
 it needs in `<defs>` or in a `<style>` block:
 
 ```ts
-import { cover, defineEffect, group, layerStage } from 'stouch'
+import { cover, defineEffect, group, layerStage } from 'svgfx'
 
 export const wash = ({ color = '#ff2d55' } = {}) =>
   defineEffect('wash', [
@@ -328,10 +328,10 @@ Randomness is keyed rather than sequential, which is what keeps output byte-stab
 
 ```tsx
 import { useMemo } from 'react'
-import { stouch, crt } from 'stouch'
+import { svgfx, crt } from 'svgfx'
 
 const Poster = ({ svg }: { svg: string }) => {
-  const html = useMemo(() => stouch(svg, [crt()]), [svg])
+  const html = useMemo(() => svgfx(svg, [crt()]), [svg])
   return <div dangerouslySetInnerHTML={{ __html: html }} />
 }
 ```
@@ -340,7 +340,7 @@ const Poster = ({ svg }: { svg: string }) => {
 
 ```js
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs'
-import { createPipeline, duotone, grain } from 'stouch'
+import { createPipeline, duotone, grain } from 'svgfx'
 
 const brand = createPipeline([duotone(), grain()], { format: 'minify' })
 
@@ -352,7 +352,7 @@ readdirSync('icons').forEach((file) => {
 **In the browser**
 
 ```ts
-const styled = stouch(await fetch('/logo.svg').then((response) => response.text()), [neon()])
+const styled = svgfx(await fetch('/logo.svg').then((response) => response.text()), [neon()])
 document.querySelector('#logo')!.innerHTML = styled
 ```
 
@@ -364,7 +364,7 @@ document.querySelector('#logo')!.innerHTML = styled
 - **Resolution.** Browsers rasterize filter regions at the SVG's own coordinate scale.
   If a filtered SVG is displayed much larger than its `viewBox`, the filtered parts can
   soften. Author at the size you intend to display, or scale the `viewBox` up.
-- **Ids.** Generated ids are namespaced per document, so several stouch outputs can live
+- **Ids.** Generated ids are namespaced per document, so several svgfx outputs can live
   in one page. Pass `scope` if you want to name that namespace yourself.
 - **Structure.** Non-rendering nodes — `<title>`, `<desc>`, `<defs>`, `<style>`,
   `<metadata>` — are left where they are. Only the drawn content is wrapped.

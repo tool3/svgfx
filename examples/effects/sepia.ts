@@ -1,8 +1,8 @@
-import { stouch, sepia } from '../../src/index.ts'
+import { svgfx, sepia } from '../../src/index.ts'
 import { load, save } from '../support.ts'
 
 const source = load('scene.svg')
 
-const output = stouch(source, [sepia()])
+const output = svgfx(source, [sepia()])
 
 save('sepia', source, output)

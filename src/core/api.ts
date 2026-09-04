@@ -2,16 +2,16 @@ import { parse } from './parse.ts'
 import { shortHash } from './random.ts'
 import { render } from './engine.ts'
 import { serialize } from './serialize.ts'
-import type { Effect, Pipeline, ResolvedSettings, StouchSettings } from './types.ts'
+import type { Effect, Pipeline, ResolvedSettings, SvgfxSettings } from './types.ts'
 
-const DEFAULT_PREFIX = 'stouch'
+const DEFAULT_PREFIX = 'svgfx'
 
 const sanitizePrefix = (prefix: string): string => {
   const cleaned = prefix.replace(/[^A-Za-z0-9_-]/g, '')
   return /^[A-Za-z]/.test(cleaned) ? cleaned : `${DEFAULT_PREFIX}${cleaned}`
 }
 
-export const resolveSettings = (settings: StouchSettings = {}): ResolvedSettings => ({
+export const resolveSettings = (settings: SvgfxSettings = {}): ResolvedSettings => ({
   seed: String(settings.seed ?? DEFAULT_PREFIX),
   prefix: sanitizePrefix(settings.prefix ?? DEFAULT_PREFIX),
   scope: settings.scope === undefined ? '' : sanitizePrefix(settings.scope),
@@ -30,15 +30,15 @@ const run = (source: string, effects: readonly Effect[], settings: ResolvedSetti
   return serialize(render(parse(source), effects, resolved), resolved.format)
 }
 
-export const stouch = (
+export const svgfx = (
   source: string,
   effects: readonly Effect[] = [],
-  settings: StouchSettings = {},
+  settings: SvgfxSettings = {},
 ): string => run(source, effects, resolveSettings(settings))
 
 export const createPipeline = (
   effects: readonly Effect[],
-  settings: StouchSettings = {},
+  settings: SvgfxSettings = {},
 ): Pipeline => {
   const resolved = resolveSettings(settings)
   return {

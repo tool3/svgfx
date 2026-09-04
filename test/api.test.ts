@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { createPipeline, resolveSettings, stouch } from '../src/core/api.ts'
+import { createPipeline, resolveSettings, svgfx } from '../src/core/api.ts'
 import { toDataUri } from '../src/core/data-uri.ts'
 import { compose } from '../src/core/effect.ts'
 import { blur } from '../src/effects/blur.ts'
@@ -11,8 +11,8 @@ const SOURCE = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><rec
 
 test('resolves settings with documented defaults', () => {
   assert.deepEqual(resolveSettings(), {
-    seed: 'stouch',
-    prefix: 'stouch',
+    seed: 'svgfx',
+    prefix: 'svgfx',
     scope: '',
     animate: true,
     format: 'preserve',
@@ -20,7 +20,7 @@ test('resolves settings with documented defaults', () => {
 })
 
 test('sanitizes a prefix that would produce invalid ids', () => {
-  assert.equal(resolveSettings({ prefix: '9 my prefix!' }).prefix, 'stouch9myprefix')
+  assert.equal(resolveSettings({ prefix: '9 my prefix!' }).prefix, 'svgfx9myprefix')
 })
 
 test('a pipeline applies the same effects to many documents', () => {
@@ -47,12 +47,12 @@ test('compose merges effects into one named effect', () => {
   const stack = compose('house-style', [grayscale(), blur(), scanlines()])
   assert.equal(stack.name, 'house-style')
   assert.equal(stack.stages.length, 3)
-  assert.match(stouch(SOURCE, [stack]), /type="saturate"/)
+  assert.match(svgfx(SOURCE, [stack]), /type="saturate"/)
 })
 
 test('formats the output on request', () => {
-  assert.match(stouch(SOURCE, [blur()], { format: 'pretty' }), /\n {2}<defs>/)
-  assert.equal(stouch(SOURCE, [blur()], { format: 'minify' }).includes('\n'), false)
+  assert.match(svgfx(SOURCE, [blur()], { format: 'pretty' }), /\n {2}<defs>/)
+  assert.equal(svgfx(SOURCE, [blur()], { format: 'minify' }).includes('\n'), false)
 })
 
 test('encodes a uri data url by default', () => {
@@ -68,8 +68,8 @@ test('encodes a base64 data url on request', () => {
 })
 
 test('the seed changes generated randomness but not structure', () => {
-  const first = stouch(SOURCE, [scanlines()], { seed: 'a' })
-  const second = stouch(SOURCE, [scanlines()], { seed: 'b' })
+  const first = svgfx(SOURCE, [scanlines()], { seed: 'a' })
+  const second = svgfx(SOURCE, [scanlines()], { seed: 'b' })
   assert.notEqual(first, second)
   assert.equal(first.split('<').length, second.split('<').length)
 })
