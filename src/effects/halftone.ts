@@ -84,7 +84,7 @@ export const halftone = ({
   color = '#111111',
   background = '#ffffff',
   keepSource = false,
-  clip = 'shape',
+  clip,
 }: HalftoneOptions = {}): Effect =>
   defineEffect('halftone', [
     layerStage((content, context) => {

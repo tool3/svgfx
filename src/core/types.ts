@@ -47,6 +47,7 @@ export interface SvgfxSettings {
   readonly seed?: string | number
   readonly prefix?: string
   readonly scope?: string
+  readonly clip?: 'shape' | 'none'
   readonly animate?: boolean
   readonly format?: OutputFormat
 }
@@ -55,6 +56,7 @@ export interface ResolvedSettings {
   readonly seed: string
   readonly prefix: string
   readonly scope: string
+  readonly clip: 'shape' | 'none'
   readonly animate: boolean
   readonly format: OutputFormat
 }

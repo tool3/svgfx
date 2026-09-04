@@ -47,8 +47,15 @@ export const silhouette = (content: SvgElement, context: EffectContext): ShapeCl
   }
 }
 
-export const clipped = (content: SvgElement, context: EffectContext, mode: ClipMode): ShapeClip | null => {
-  if (mode !== 'shape') return null
+const resolveMode = (context: EffectContext, mode: ClipMode | undefined): ClipMode =>
+  mode ?? (context.settings.clip === 'none' ? 'viewport' : 'shape')
+
+export const clipped = (
+  content: SvgElement,
+  context: EffectContext,
+  mode: ClipMode | undefined,
+): ShapeClip | null => {
+  if (resolveMode(context, mode) !== 'shape') return null
 
   const detected = detectShape(context.root, context.artwork, context.viewport, context.sharedId('clip'))
   if (detected !== null) {

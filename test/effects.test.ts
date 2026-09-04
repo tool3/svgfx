@@ -34,6 +34,12 @@ import type { Effect } from '../src/core/types.ts'
 
 const SOURCE = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 60"><rect width="100" height="60"/></svg>'
 
+const NO_BACKDROP =
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 60"><circle cx="30" cy="30" r="10"/><circle cx="70" cy="30" r="10"/></svg>'
+
+const ROUNDED =
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 60"><g transform="translate(0,0)"><rect width="100" height="60" rx="8" fill="#111"/><circle cx="50" cy="30" r="8" fill="#fff"/></g></svg>'
+
 const apply = (effect: Effect): string => svgfx(SOURCE, [effect], { seed: 'test' })
 
 const count = (haystack: string, needle: string): number => haystack.split(needle).length - 1
@@ -254,18 +260,12 @@ test('every effect leaves the source artwork present in the output', () => {
   })
 })
 
-const NO_BACKDROP =
-  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 60"><circle cx="30" cy="30" r="10"/><circle cx="70" cy="30" r="10"/></svg>'
-
-const ROUNDED =
-  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 60"><g transform="translate(0,0)"><rect width="100" height="60" rx="8" fill="#111"/><circle cx="50" cy="30" r="8" fill="#fff"/></g></svg>'
-
 const onNoBackdrop = (effect: Effect): string => svgfx(NO_BACKDROP, [effect], { seed: 'test' })
 
-test('overlays share one clip definition instead of repeating it', () => {
+test('overlays share one clip definition with the frame clip', () => {
   const output = svgfx(SOURCE, [scanlines(), vignette()], { seed: 'test' })
   assert.equal(count(output, '<clipPath'), 1)
-  assert.equal(count(output, 'clip-path="url('), 2)
+  assert.equal(count(output, 'clip-path="url('), 3)
 })
 
 test('overlays clip flush to a detected backdrop rect', () => {
@@ -305,10 +305,31 @@ test('an unpainted backdrop rect is not mistaken for the silhouette', () => {
   assert.equal(count(svgfx(outlineOnly, [scanlines()], { seed: 'test' }), '<clipPath'), 0)
 })
 
-test('clip viewport opts out of following the shape entirely', () => {
-  const output = apply(scanlines({ clip: 'viewport' }))
+test('clip viewport opts the overlay out of following the shape', () => {
+  const output = svgfx(SOURCE, [scanlines({ clip: 'viewport' })], { seed: 'test', clip: 'none' })
   assert.equal(count(output, '<clipPath'), 0)
   assert.equal(count(output, 'shape-mask'), 0)
+})
+
+test('the finished result is clipped to the detected frame', () => {
+  const output = svgfx(ROUNDED, [bloom({ radius: 10 })], { seed: 'test' })
+  assert.match(output, /<clipPath[^>]*><rect width="100" height="60" rx="8"\/><\/clipPath>/)
+  assert.match(output, /<g filter="url\([^)]*\)" clip-path="url\(#svgfx-[^"]*-clip\)"/)
+})
+
+test('a filter that spills past the frame is trimmed to it', () => {
+  const spilling = svgfx(ROUNDED, [glow({ radius: 12, color: '#ff0000' })], { seed: 'test' })
+  assert.match(spilling, /clip-path="url\(#svgfx-[^"]*-clip\)"/)
+})
+
+test('frame clipping can be turned off entirely', () => {
+  const output = svgfx(ROUNDED, [bloom({ radius: 10 })], { seed: 'test', clip: 'none' })
+  assert.equal(count(output, '<clipPath'), 0)
+})
+
+test('artwork with no frame is never clipped, so glows still spill', () => {
+  const output = svgfx(NO_BACKDROP, [glow({ radius: 8 })], { seed: 'test' })
+  assert.equal(count(output, 'clip-path="url('), 0)
 })
 
 test('vignette and halftone follow the shape the same way', () => {
@@ -323,4 +344,21 @@ test('the root clip-path is reused when the artwork declares one', () => {
   const output = svgfx(rootClipped, [scanlines()], { seed: 'test' })
   assert.match(output, /<rect[^>]*clip-path="url\(#frame\)"/)
   assert.equal(count(output, 'shape-mask'), 0)
+})
+
+test('settings clip none turns off both the frame clip and overlay shaping', () => {
+  const output = svgfx(ROUNDED, [scanlines(), vignette()], { seed: 'test', clip: 'none' })
+  assert.equal(count(output, '<clipPath'), 0)
+  assert.equal(count(output, 'shape-mask'), 0)
+})
+
+test('an effect can still opt into shape following when settings say none', () => {
+  const output = svgfx(ROUNDED, [scanlines({ clip: 'shape' })], { seed: 'test', clip: 'none' })
+  assert.equal(count(output, '<clipPath'), 1)
+  assert.match(output, /<rect[^>]*clip-path="url\(#svgfx-[^"]*-clip\)"/)
+})
+
+test('an effect can opt out while the frame clip stays on', () => {
+  const output = svgfx(ROUNDED, [scanlines({ clip: 'viewport' })], { seed: 'test' })
+  assert.equal(count(output, 'clip-path="url('), 1)
 })

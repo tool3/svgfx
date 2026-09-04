@@ -4,6 +4,7 @@ import { invalidEffect } from './errors.ts'
 import { SOURCE_GRAPHIC } from './filter.ts'
 import { group } from './layers.ts'
 import { createRandom } from './random.ts'
+import { detectShape } from './shape.ts'
 import type {
   AttributeInput,
   Effect,
@@ -193,8 +194,21 @@ export const render = (
     { content: group(renderable), defs: [], styles: [] },
   )
 
+  const frame =
+    settings.clip === 'none'
+      ? null
+      : detectShape(root, renderable, viewport, `${settings.prefix}-${settings.scope}-clip`)
+  const framed =
+    frame !== null && frame.covers
+      ? withAttributes(result.content, { 'clip-path': frame.reference })
+      : result.content
+  const defs =
+    frame !== null && frame.covers && frame.definition !== null
+      ? [...result.defs, frame.definition]
+      : result.defs
+
   return {
     ...document,
-    root: withChildren(root, [...fixed, ...defsNodes(result.defs), ...styleNodes(result.styles), result.content]),
+    root: withChildren(root, [...fixed, ...defsNodes(defs), ...styleNodes(result.styles), framed]),
   }
 }

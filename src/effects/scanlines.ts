@@ -29,7 +29,7 @@ export const scanlines = ({
   blend = 'multiply',
   animate: animated = false,
   speed = 6,
-  clip = 'shape',
+  clip,
 }: ScanlinesOptions = {}): Effect =>
   defineEffect('scanlines', [
     layerStage((content, context) => {

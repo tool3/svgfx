@@ -18,7 +18,7 @@ export const vignette = ({
   radius = 0.6,
   softness = 0.7,
   color = '#000000',
-  clip = 'shape',
+  clip,
 }: VignetteOptions = {}): Effect =>
   defineEffect('vignette', [
     layerStage((content, context) => {

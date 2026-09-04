@@ -14,6 +14,7 @@ test('resolves settings with documented defaults', () => {
     seed: 'svgfx',
     prefix: 'svgfx',
     scope: '',
+    clip: 'shape',
     animate: true,
     format: 'preserve',
   })

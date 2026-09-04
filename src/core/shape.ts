@@ -95,8 +95,9 @@ const asClipShape = (candidate: Candidate): SvgElement => {
 }
 
 export interface DetectedShape {
-  readonly reference: string | null
+  readonly reference: string
   readonly definition: SvgElement | null
+  readonly covers: boolean
 }
 
 export const detectShape = (
@@ -106,7 +107,9 @@ export const detectShape = (
   clipId: string,
 ): DetectedShape | null => {
   const rootClip = root.attributes['clip-path']
-  if (rootClip !== undefined && rootClip.startsWith('url(')) return { reference: rootClip, definition: null }
+  if (rootClip !== undefined && rootClip.startsWith('url(')) {
+    return { reference: rootClip, definition: null, covers: true }
+  }
 
   const candidates = collect(content, 0, 0, true)
   const backdrop = candidates.find((candidate) => coversViewport(candidate, viewport))
@@ -120,5 +123,6 @@ export const detectShape = (
   return {
     reference: `url(#${clipId})`,
     definition: element('clipPath', { id: clipId, clipPathUnits: 'userSpaceOnUse' }, [asClipShape(chosen)]),
+    covers: backdrop !== undefined,
   }
 }

@@ -38,7 +38,7 @@ dozen other looks baked in. Still vector, still editable, no rasterizing, no DOM
 - [API](#api)
 - [Effects](#effects)
 - [Examples](#examples)
-- [Shape](#overlays-follow-the-artworks-shape)
+- [Shape](#the-output-keeps-your-artworks-shape)
 - [Motion](#motion)
 - [Writing your own effect](#writing-your-own-effect)
 - [Recipes](#recipes)
@@ -121,6 +121,7 @@ URI-encoded by default (smaller and readable); pass `{ base64: true }` if you ne
 | `seed`    | `'svgfx'`   | Seeds every random decision. Change it to reroll a glitch or a grain field; keep it to get the same output forever. |
 | `prefix`  | `'svgfx'`   | Prefix for every generated id and class. |
 | `scope`   | auto         | Id namespace. Derived from the source, seed and effects so several svgfx outputs can be inlined in one page without colliding. Set it yourself for stable, readable ids. |
+| `clip`    | `'shape'`    | Trim the finished result to the artwork's own frame, so the output silhouette matches the input exactly. `'none'` lets effects spill past it. |
 | `animate` | `true`       | Global switch for motion. `false` strips animation from every effect that asked for it — useful for print, PDF or snapshot tests. |
 | `format`  | `'preserve'` | `'preserve'` keeps the input's whitespace, `'pretty'` re-indents, `'minify'` drops comments and layout whitespace. |
 
@@ -261,37 +262,45 @@ columns are playing: the source keeps its motion, and the second adds svgfx's on
 | [`motion-crt`](https://github.com/tool3/svgfx/blob/master/examples/animated/preset-over-motion.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/motion-crt.before.svg" width="240" alt="motion-crt before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/motion-crt.after.svg" width="240" alt="motion-crt after"> |
 | [`motion-layered`](https://github.com/tool3/svgfx/blob/master/examples/animated/layered-motion.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/motion-layered.before.svg" width="240" alt="motion-layered before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/motion-layered.after.svg" width="240" alt="motion-layered after"> |
 
-## Overlays follow the artwork's shape
+## The output keeps your artwork's shape
 
-Most effects are SVG filters, so they respect the artwork's alpha for free. Three of
-them — `scanlines`, `vignette` and `halftone` — lay something *over* the drawing, and a
-naive overlay is a rectangle. Point one at a rounded terminal window, a card, or a logo
-on transparency and the overlay would paint straight over the corners.
+An SVG with rounded corners should come back with the same rounded corners. Two things
+would otherwise break that, and svgfx handles both.
 
-It doesn't. Those effects work out the shape your SVG actually has and match it:
+**Overlays.** `scanlines`, `vignette` and `halftone` lay something *over* the drawing,
+and a naive overlay is a rectangle that paints straight over your corners.
+
+**Filters.** `bloom`, `glow`, `chromaticAberration` and friends bleed *outward* by
+design. On a rounded card that bleed lands outside the corner arc as a soft halo and
+colour fringing, so the silhouette stops being yours.
+
+So svgfx works out the shape your artwork actually has, and holds everything to it:
 
 1. **A frame it can measure.** If your artwork sits on a full-bleed backdrop — a
-   `<rect>` filling the viewBox, rounded or not, however deeply it is nested in groups —
-   that rect's geometry becomes a `clipPath`, corner radius included. The overlay stops
-   exactly where your frame stops, with a hard vector edge and no extra cost.
+   `<rect>` filling the viewBox, rounded or not, however deeply nested in groups — that
+   rect's geometry becomes a `clipPath`, corner radius included. Overlays clip to it,
+   and so does the finished result, so filter bleed is trimmed at the same arc.
 2. **A clip you already declared.** A `clip-path` on the root `<svg>` is reused as-is.
-3. **Anything else.** For arbitrary artwork it falls back to a mask built from the
-   drawing's own alpha, so the overlay still lands only where the drawing is — holes,
-   soft edges and all.
+3. **Anything else.** For artwork with no frame, overlays fall back to a mask built from
+   the drawing's own alpha, and nothing is clipped globally — a glow on a logo still
+   glows outward, which is the point of it.
+
+Measured on a rounded terminal card with the `crt` preset: without this, 1853 pixels of
+the silhouette differ from the input. With it, 2 — both antialiasing on the arc.
 
 ```ts
-svgfx(roundedTerminalSvg, [scanlines()])
+svgfx(roundedCard, [crt()])
 ```
 
-Pass `clip: 'viewport'` when you actually want the overlay to fill the whole frame:
+Two escape hatches, at different levels:
 
 ```ts
-svgfx(source, [scanlines({ clip: 'viewport' })])
+svgfx(source, [scanlines({ clip: 'viewport' })])   // this overlay fills the frame
+svgfx(source, [glow()], { clip: 'none' })          // let everything spill past the frame
 ```
 
-The measured-frame path is free. The alpha fallback costs one extra render of the
-artwork per overlay effect, since the drawing is rendered once for the picture and once
-for the mask.
+The measured-frame path is free — one `clipPath`, shared by every effect that needs it.
+The alpha fallback costs one extra render of the artwork per overlay effect.
 
 ## Motion
 

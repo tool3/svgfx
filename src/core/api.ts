@@ -15,6 +15,7 @@ export const resolveSettings = (settings: SvgfxSettings = {}): ResolvedSettings 
   seed: String(settings.seed ?? DEFAULT_PREFIX),
   prefix: sanitizePrefix(settings.prefix ?? DEFAULT_PREFIX),
   scope: settings.scope === undefined ? '' : sanitizePrefix(settings.scope),
+  clip: settings.clip ?? 'shape',
   animate: settings.animate ?? true,
   format: settings.format ?? 'preserve',
 })
