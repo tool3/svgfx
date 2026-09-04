@@ -15,6 +15,7 @@ import type {
   ResolvedSettings,
   SvgDocument,
   SvgElement,
+  SvgNode,
   Viewport,
 } from './types.ts'
 
@@ -36,13 +37,22 @@ interface FilterState {
   readonly styles: readonly string[]
 }
 
-const createContext = (viewport: Viewport, settings: ResolvedSettings, index: number): EffectContext => {
+const createContext = (
+  viewport: Viewport,
+  settings: ResolvedSettings,
+  index: number,
+  root: SvgElement,
+  artwork: readonly SvgNode[],
+): EffectContext => {
   const random = createRandom(settings.seed, index)
   return {
     viewport,
+    root,
+    artwork,
     settings,
     motion: settings.animate,
     uid: (hint) => `${settings.prefix}-${settings.scope}-${hint}-${index}`,
+    sharedId: (hint) => `${settings.prefix}-${settings.scope}-${hint}`,
     random,
     range: (minimum, maximum, key) => minimum + (maximum - minimum) * random(key),
   }
@@ -72,6 +82,8 @@ const wireFilterRun = (
   run: readonly StageEntry[],
   viewport: Viewport,
   settings: ResolvedSettings,
+  root: SvgElement,
+  artwork: readonly SvgNode[],
 ): FilterState =>
   run.reduce<FilterState>(
     (current, entry, position) => {
@@ -82,7 +94,10 @@ const wireFilterRun = (
             ? `${settings.prefix}-out-${entry.index}`
             : `${settings.prefix}-pass-${entry.index}`,
       }
-      const build = (entry.stage as FilterStage).build(io, createContext(viewport, settings, entry.index))
+      const build = (entry.stage as FilterStage).build(
+        io,
+        createContext(viewport, settings, entry.index, root, artwork),
+      )
       return {
         output: io.output,
         primitives: [...current.primitives, ...build.primitives],
@@ -98,8 +113,10 @@ const applyFilterRun = (
   state: RenderState,
   viewport: Viewport,
   settings: ResolvedSettings,
+  root: SvgElement,
+  artwork: readonly SvgNode[],
 ): RenderState => {
-  const wired = wireFilterRun(run, viewport, settings)
+  const wired = wireFilterRun(run, viewport, settings, root, artwork)
   const filterId = `${settings.prefix}-${settings.scope}-filter-${run[0]?.index ?? 0}`
   const region: FilterRegion = run.some((entry) => (entry.stage as FilterStage).region === 'viewport')
     ? 'viewport'
@@ -125,8 +142,13 @@ const applyLayerStage = (
   state: RenderState,
   viewport: Viewport,
   settings: ResolvedSettings,
+  root: SvgElement,
+  artwork: readonly SvgNode[],
 ): RenderState => {
-  const build = (entry.stage as LayerStage).build(state.content, createContext(viewport, settings, entry.index))
+  const build = (entry.stage as LayerStage).build(
+    state.content,
+    createContext(viewport, settings, entry.index, root, artwork),
+  )
   return {
     content: build.content,
     defs: [...state.defs, ...(build.defs ?? [])],
@@ -139,8 +161,14 @@ const styleNodes = (styles: readonly string[]): readonly SvgElement[] =>
     ? []
     : [element('style', {}, [{ type: 'raw', value: `<![CDATA[${styles.join('')}]]>` }])]
 
+const unique = (defs: readonly SvgElement[]): readonly SvgElement[] =>
+  defs.filter((node, index) => {
+    const id = node.attributes.id
+    return id === undefined || defs.findIndex((other) => other.attributes.id === id) === index
+  })
+
 const defsNodes = (defs: readonly SvgElement[]): readonly SvgElement[] =>
-  defs.length === 0 ? [] : [element('defs', {}, defs)]
+  defs.length === 0 ? [] : [element('defs', {}, unique(defs))]
 
 export const render = (
   document: SvgDocument,
@@ -160,8 +188,8 @@ export const render = (
   const result = groupRuns(entries).reduce<RenderState>(
     (state, run) =>
       run[0]?.stage.kind === 'filter'
-        ? applyFilterRun(run, state, viewport, settings)
-        : applyLayerStage(run[0] as StageEntry, state, viewport, settings),
+        ? applyFilterRun(run, state, viewport, settings, root, renderable)
+        : applyLayerStage(run[0] as StageEntry, state, viewport, settings, root, renderable),
     { content: group(renderable), defs: [], styles: [] },
   )
 

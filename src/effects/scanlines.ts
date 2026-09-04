@@ -2,7 +2,7 @@ import { animationDeclaration, keyframes } from '../core/animation.ts'
 import { defineEffect, layerStage } from '../core/effect.ts'
 import { cover, expanded, group, pattern, rect } from '../core/layers.ts'
 import { clamp, formatNumber } from '../core/numbers.ts'
-import { clipped } from '../core/silhouette.ts'
+import { clipAttributes, clipped } from '../core/silhouette.ts'
 import type { ClipMode } from '../core/silhouette.ts'
 import type { Effect } from '../core/types.ts'
 
@@ -43,7 +43,7 @@ export const scanlines = ({
         fill: `url(#${patternId})`,
         opacity: clamp(opacity, 0, 1),
         style: blend === 'normal' ? undefined : `mix-blend-mode:${blend}`,
-        mask: shape === null ? undefined : `url(#${shape.maskId})`,
+        ...clipAttributes(shape),
       })
       return {
         defs: [

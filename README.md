@@ -1,28 +1,52 @@
+<div align="center">
+
 # @svgfx/postprocessing
 
-**Post-processing effects for any SVG.** Give it an SVG, get back an SVG — now with
-scanlines, bloom, glitch, halftone, duotone or a dozen other looks baked in.
+`svgfx(logo, [crt()])`
 
-```ts
-import { svgfx, scanlines, bloom } from '@svgfx/postprocessing'
+<img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/crt.after.svg" width="420" alt="crt preset">
 
-const output = svgfx(input, [bloom({ radius: 6 }), scanlines({ gap: 3 })])
-```
+### Post-processing effects for any SVG.
 
-- **Vector in, vector out.** No canvas, no rasterizing, no `<image>` payloads. The
-  result is a real SVG that still scales, still has your paths in it, and still opens
-  in a design tool.
-- **Runs anywhere.** Zero runtime dependencies and no DOM. Node, Bun, Deno, edge
-  functions, build scripts, browsers.
-- **Deterministic.** Same input and settings produce byte-identical output, so it
-  drops into a build pipeline and a snapshot test without surprises.
-- **14 KB gzipped**, fully tree-shakeable. Import one effect, ship one effect.
-- **Self-contained motion.** Opt into `animate` and the output loops on its own —
-  inside an `<img>` tag, with no JavaScript attached.
+Give it an SVG, get back an SVG — now with scanlines, bloom, glitch, halftone or a
+dozen other looks baked in. Still vector, still editable, no rasterizing, no DOM.
+
+[![npm](https://img.shields.io/npm/v/@svgfx/postprocessing)](https://www.npmjs.com/package/@svgfx/postprocessing)
+[![license](https://img.shields.io/badge/license-MIT-orange)](./LICENSE)
+
+</div>
 
 ---
 
-## Install
+## Highlights
+
+- ✅ **Vector in, vector out** — no canvas, no rasterizing, no `<image>` payloads. The result still scales and still has your paths in it.
+- ✅ **Runs anywhere** — zero runtime dependencies, no DOM. Node, Bun, Deno, edge functions, build scripts, browsers.
+- ✅ **27 effects + 8 presets** — every one tuned to look right with no arguments.
+- ✅ **Follows your artwork's shape** — overlays clip flush to a rounded frame or any silhouette, never over it.
+- ✅ **Deterministic** — same input and settings give byte-identical output, so it drops into a build pipeline and a snapshot test.
+- ✅ **14 KB gzipped**, fully tree-shakeable. Import one effect, ship one effect.
+- ✅ **Self-contained motion** — opt into `animate` and the output loops on its own inside an `<img>`, no JavaScript attached.
+- ✅ **Keeps existing animation** — an SVG that already animates keeps animating.
+
+---
+
+## Table of contents
+
+- [Installation](#installation)
+- [Quick start](#quick-start)
+- [API](#api)
+- [Effects](#effects)
+- [Examples](#examples)
+- [Shape](#overlays-follow-the-artworks-shape)
+- [Motion](#motion)
+- [Writing your own effect](#writing-your-own-effect)
+- [Recipes](#recipes)
+- [Notes](#notes)
+
+---
+
+## Installation
 
 ```bash
 npm install @svgfx/postprocessing
@@ -240,14 +264,20 @@ columns are playing: the source keeps its motion, and the second adds svgfx's on
 ## Overlays follow the artwork's shape
 
 Most effects are SVG filters, so they respect the artwork's alpha for free. Three of
-them — `scanlines`, `vignette` and `halftone` — work by laying something *over* the
-drawing, and a naive overlay is a rectangle. Point one at a rounded-console SVG, a logo
-on transparency, or anything with a non-rectangular silhouette, and the overlay would
-paint over the corners.
+them — `scanlines`, `vignette` and `halftone` — lay something *over* the drawing, and a
+naive overlay is a rectangle. Point one at a rounded terminal window, a card, or a logo
+on transparency and the overlay would paint straight over the corners.
 
-It doesn't. Those effects mask their overlay with a silhouette taken from the artwork's
-own alpha at that point in the chain, so the overlay lands exactly where the drawing is
-and nowhere else — rounded corners, holes and soft edges included.
+It doesn't. Those effects work out the shape your SVG actually has and match it:
+
+1. **A frame it can measure.** If your artwork sits on a full-bleed backdrop — a
+   `<rect>` filling the viewBox, rounded or not, however deeply it is nested in groups —
+   that rect's geometry becomes a `clipPath`, corner radius included. The overlay stops
+   exactly where your frame stops, with a hard vector edge and no extra cost.
+2. **A clip you already declared.** A `clip-path` on the root `<svg>` is reused as-is.
+3. **Anything else.** For arbitrary artwork it falls back to a mask built from the
+   drawing's own alpha, so the overlay still lands only where the drawing is — holes,
+   soft edges and all.
 
 ```ts
 svgfx(roundedTerminalSvg, [scanlines()])
@@ -259,9 +289,9 @@ Pass `clip: 'viewport'` when you actually want the overlay to fill the whole fra
 svgfx(source, [scanlines({ clip: 'viewport' })])
 ```
 
-The silhouette costs one extra render of the artwork per overlay effect (it is drawn
-once for the picture, once for the mask). `clip: 'viewport'` skips that, and it is the
-cheaper choice for full-bleed art where the two are identical anyway.
+The measured-frame path is free. The alpha fallback costs one extra render of the
+artwork per overlay effect, since the drawing is rendered once for the picture and once
+for the mask.
 
 ## Motion
 

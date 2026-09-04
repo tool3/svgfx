@@ -61,9 +61,12 @@ export interface ResolvedSettings {
 
 export interface EffectContext {
   readonly viewport: Viewport
+  readonly root: SvgElement
+  readonly artwork: readonly SvgNode[]
   readonly settings: ResolvedSettings
   readonly motion: boolean
   readonly uid: (hint: string) => string
+  readonly sharedId: (hint: string) => string
   readonly random: (key: string | number) => number
   readonly range: (minimum: number, maximum: number, key: string | number) => number
 }

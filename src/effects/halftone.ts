@@ -3,7 +3,7 @@ import { defineEffect, layerStage } from '../core/effect.ts'
 import { LUMINANCE_MATRIX, RGB_CHANNELS, colorMatrix, componentTransfer, primitive, transfer } from '../core/filter.ts'
 import { cover, group, mask, pattern, use } from '../core/layers.ts'
 import { clamp, formatNumber } from '../core/numbers.ts'
-import { clipped } from '../core/silhouette.ts'
+import { clipAttributes, clipped } from '../core/silhouette.ts'
 import type { ClipMode } from '../core/silhouette.ts'
 import type { EffectContext, Effect, SvgElement, Viewport } from '../core/types.ts'
 
@@ -101,10 +101,7 @@ export const halftone = ({
         keepSource || background === null
           ? []
           : [
-              cover(context.viewport, {
-                fill: background,
-                mask: shape === null ? undefined : `url(#${shape.maskId})`,
-              }),
+              cover(context.viewport, { fill: background, ...clipAttributes(shape) }),
             ]
       return {
         defs: [

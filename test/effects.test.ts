@@ -196,7 +196,9 @@ test('halftone dots grow with each darker level', () => {
 })
 
 test('halftone keeps the source artwork when asked', () => {
-  assert.equal(count(apply(halftone({ keepSource: true })), '<rect width="100" height="60"/>'), 1)
+  const output = apply(halftone({ keepSource: true }))
+  assert.equal(count(output, '<g><rect width="100" height="60"/></g>'), 0)
+  assert.match(output, /id="svgfx-[^"]*halftone-source[^"]*"><rect width="100" height="60"\/>/)
 })
 
 test('vignette overlays a radial gradient', () => {
@@ -252,34 +254,73 @@ test('every effect leaves the source artwork present in the output', () => {
   })
 })
 
-test('scanlines follow the artwork silhouette by default', () => {
-  const output = apply(scanlines())
-  assert.match(output, /<mask [^>]*id="svgfx-[^"]*shape-mask/)
-  assert.match(output, /<rect[^>]*mask="url\(#svgfx-[^"]*shape-mask[^"]*\)"/)
-  assert.match(output, /<feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0"/)
+const NO_BACKDROP =
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 60"><circle cx="30" cy="30" r="10"/><circle cx="70" cy="30" r="10"/></svg>'
+
+const ROUNDED =
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 60"><g transform="translate(0,0)"><rect width="100" height="60" rx="8" fill="#111"/><circle cx="50" cy="30" r="8" fill="#fff"/></g></svg>'
+
+const onNoBackdrop = (effect: Effect): string => svgfx(NO_BACKDROP, [effect], { seed: 'test' })
+
+test('overlays share one clip definition instead of repeating it', () => {
+  const output = svgfx(SOURCE, [scanlines(), vignette()], { seed: 'test' })
+  assert.equal(count(output, '<clipPath'), 1)
+  assert.equal(count(output, 'clip-path="url('), 2)
 })
 
-test('scanlines can cover the whole viewport instead', () => {
-  const output = apply(scanlines({ clip: 'viewport' }))
+test('overlays clip flush to a detected backdrop rect', () => {
+  const output = apply(scanlines())
+  assert.match(output, /<clipPath id="svgfx-[^"]*-clip" clipPathUnits="userSpaceOnUse"><rect width="100" height="60"\/><\/clipPath>/)
+  assert.match(output, /<rect[^>]*clip-path="url\(#svgfx-[^"]*-clip\)"/)
   assert.equal(count(output, 'shape-mask'), 0)
-  assert.match(output, /<rect x="0" y="0" width="100" height="60"/)
 })
 
-test('vignette follows the silhouette by default and can opt out', () => {
-  assert.match(apply(vignette()), /mask="url\(#svgfx-[^"]*shape-mask[^"]*\)"/)
-  assert.equal(count(apply(vignette({ clip: 'viewport' })), 'shape-mask'), 0)
+test('a rounded backdrop is carried into the clip path with its corner radius', () => {
+  const output = svgfx(ROUNDED, [scanlines()], { seed: 'test' })
+  assert.match(output, /<clipPath[^>]*><rect width="100" height="60" rx="8"\/><\/clipPath>/)
 })
 
-test('halftone masks its paper backdrop to the silhouette', () => {
-  const output = apply(halftone({ background: '#ffffff' }))
-  assert.match(output, /<rect[^>]*fill="#ffffff"[^>]*mask="url\(#svgfx-[^"]*shape-mask/)
+test('detection sees through wrapping groups and identity translates', () => {
+  const wrapped = ROUNDED.replace('translate(0,0)', 'translate(0, 0)')
+  assert.match(svgfx(wrapped, [scanlines()], { seed: 'test' }), /<rect width="100" height="60" rx="8"\/>/)
 })
 
-test('halftone with a null background paints no backdrop', () => {
-  assert.equal(count(apply(halftone({ background: null })), 'fill="#ffffff"'), 0)
+test('a real translate is folded into the clip shape', () => {
+  const shifted =
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 60"><g transform="translate(0,0)"><rect width="100" height="60" rx="4"/></g></svg>'
+  assert.match(svgfx(shifted, [scanlines()], { seed: 'test' }), /<rect width="100" height="60" rx="4"\/>/)
 })
 
-test('the silhouette references the artwork exactly once per overlay', () => {
-  const output = apply(scanlines())
-  assert.equal(count(output, '<use href="#svgfx'), 1)
+test('artwork with no backdrop falls back to an alpha silhouette mask', () => {
+  const output = onNoBackdrop(scanlines())
+  assert.equal(count(output, '<clipPath'), 0)
+  assert.match(output, /<mask id="svgfx-[^"]*shape-mask/)
+  assert.match(output, /<feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0"/)
+  assert.match(output, /mask="url\(#svgfx-[^"]*shape-mask[^"]*\)"/)
+})
+
+test('an unpainted backdrop rect is not mistaken for the silhouette', () => {
+  const outlineOnly =
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 60"><rect width="100" height="60" fill="none" stroke="#000"/><circle cx="50" cy="30" r="9"/></svg>'
+  assert.equal(count(svgfx(outlineOnly, [scanlines()], { seed: 'test' }), '<clipPath'), 0)
+})
+
+test('clip viewport opts out of following the shape entirely', () => {
+  const output = apply(scanlines({ clip: 'viewport' }))
+  assert.equal(count(output, '<clipPath'), 0)
+  assert.equal(count(output, 'shape-mask'), 0)
+})
+
+test('vignette and halftone follow the shape the same way', () => {
+  assert.match(apply(vignette()), /clip-path="url\(#svgfx-[^"]*-clip\)/)
+  assert.match(apply(halftone({ background: '#ffffff' })), /<rect[^>]*fill="#ffffff"[^>]*clip-path="url\(#svgfx/)
+  assert.match(onNoBackdrop(vignette()), /mask="url\(#svgfx-[^"]*shape-mask/)
+})
+
+test('the root clip-path is reused when the artwork declares one', () => {
+  const rootClipped =
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 60" clip-path="url(#frame)"><defs><clipPath id="frame"><rect width="100" height="60" rx="6"/></clipPath></defs><circle cx="50" cy="30" r="9"/></svg>'
+  const output = svgfx(rootClipped, [scanlines()], { seed: 'test' })
+  assert.match(output, /<rect[^>]*clip-path="url\(#frame\)"/)
+  assert.equal(count(output, 'shape-mask'), 0)
 })

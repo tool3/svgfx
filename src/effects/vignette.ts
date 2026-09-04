@@ -1,7 +1,7 @@
 import { defineEffect, layerStage } from '../core/effect.ts'
 import { cover, group, radialGradient, stop } from '../core/layers.ts'
 import { clamp } from '../core/numbers.ts'
-import { clipped } from '../core/silhouette.ts'
+import { clipAttributes, clipped } from '../core/silhouette.ts'
 import type { ClipMode } from '../core/silhouette.ts'
 import type { Effect } from '../core/types.ts'
 
@@ -42,10 +42,7 @@ export const vignette = ({
         ],
         content: group([
           shape?.content ?? content,
-          cover(context.viewport, {
-            fill: `url(#${gradientId})`,
-            mask: shape === null ? undefined : `url(#${shape.maskId})`,
-          }),
+          cover(context.viewport, { fill: `url(#${gradientId})`, ...clipAttributes(shape) }),
         ]),
       }
     }),
