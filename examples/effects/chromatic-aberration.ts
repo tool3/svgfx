@@ -3,6 +3,6 @@ import { load, save } from '../support.ts'
 
 const source = load('scene.svg')
 
-const output = svgfx(source, [chromaticAberration({ offset: 4 })])
+const output = svgfx(source, [chromaticAberration({ offset: 1 })])
 
 save('chromatic-aberration', source, output)
