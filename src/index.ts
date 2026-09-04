@@ -39,6 +39,8 @@ export {
 } from './core/layers.ts'
 export { animate, animationDeclaration, keyframes, rule, seconds } from './core/animation.ts'
 export type { AnimateSpec } from './core/animation.ts'
+export { clipped, silhouette } from './core/silhouette.ts'
+export type { ClipMode, Silhouette } from './core/silhouette.ts'
 export { parseColor } from './core/color.ts'
 export type { Rgb } from './core/color.ts'
 

@@ -3,6 +3,8 @@ import { defineEffect, layerStage } from '../core/effect.ts'
 import { LUMINANCE_MATRIX, RGB_CHANNELS, colorMatrix, componentTransfer, primitive, transfer } from '../core/filter.ts'
 import { cover, group, mask, pattern, use } from '../core/layers.ts'
 import { clamp, formatNumber } from '../core/numbers.ts'
+import { clipped } from '../core/silhouette.ts'
+import type { ClipMode } from '../core/silhouette.ts'
 import type { EffectContext, Effect, SvgElement, Viewport } from '../core/types.ts'
 
 export interface HalftoneOptions {
@@ -12,6 +14,7 @@ export interface HalftoneOptions {
   readonly color?: string
   readonly background?: string | null
   readonly keepSource?: boolean
+  readonly clip?: ClipMode
 }
 
 const EDGE = 60
@@ -81,6 +84,7 @@ export const halftone = ({
   color = '#111111',
   background = '#ffffff',
   keepSource = false,
+  clip = 'shape',
 }: HalftoneOptions = {}): Effect =>
   defineEffect('halftone', [
     layerStage((content, context) => {
@@ -91,15 +95,25 @@ export const halftone = ({
       const bands = Array.from({ length: count }, (_, index) =>
         buildBand(context, sourceId, index, count, cell, angle, color),
       )
+      const shape = clipped(source, context, clip)
+      const paper = shape?.content ?? source
       const backdrop =
-        keepSource || background === null ? [] : [cover(context.viewport, { fill: background })]
+        keepSource || background === null
+          ? []
+          : [
+              cover(context.viewport, {
+                fill: background,
+                mask: shape === null ? undefined : `url(#${shape.maskId})`,
+              }),
+            ]
       return {
         defs: [
-          ...(keepSource ? [] : [source]),
+          ...(shape?.defs ?? []),
+          ...(keepSource ? [] : [paper]),
           ...bands.flatMap((band) => [band.cut, band.mask, band.dots]),
         ],
         content: group([
-          ...(keepSource ? [source] : []),
+          ...(keepSource ? [paper] : []),
           ...backdrop,
           ...bands.map((band) => band.layer),
         ]),

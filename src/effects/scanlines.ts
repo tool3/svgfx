@@ -2,6 +2,8 @@ import { animationDeclaration, keyframes } from '../core/animation.ts'
 import { defineEffect, layerStage } from '../core/effect.ts'
 import { cover, expanded, group, pattern, rect } from '../core/layers.ts'
 import { clamp, formatNumber } from '../core/numbers.ts'
+import { clipped } from '../core/silhouette.ts'
+import type { ClipMode } from '../core/silhouette.ts'
 import type { Effect } from '../core/types.ts'
 
 export type ScanlineBlend = 'multiply' | 'overlay' | 'screen' | 'normal'
@@ -15,6 +17,7 @@ export interface ScanlinesOptions {
   readonly blend?: ScanlineBlend
   readonly animate?: boolean
   readonly speed?: number
+  readonly clip?: ClipMode
 }
 
 export const scanlines = ({
@@ -26,6 +29,7 @@ export const scanlines = ({
   blend = 'multiply',
   animate: animated = false,
   speed = 6,
+  clip = 'shape',
 }: ScanlinesOptions = {}): Effect =>
   defineEffect('scanlines', [
     layerStage((content, context) => {
@@ -34,13 +38,16 @@ export const scanlines = ({
       const pitch = Math.max(gap, 0.1)
       const motion = animated && context.motion
       const area = angle === 0 ? context.viewport : expanded(context.viewport, 1.6)
+      const shape = clipped(content, context, clip)
       const overlay = cover(area, {
         fill: `url(#${patternId})`,
         opacity: clamp(opacity, 0, 1),
         style: blend === 'normal' ? undefined : `mix-blend-mode:${blend}`,
+        mask: shape === null ? undefined : `url(#${shape.maskId})`,
       })
       return {
         defs: [
+          ...(shape?.defs ?? []),
           pattern(
             patternId,
             { width: pitch, height: pitch, patternTransform: angle === 0 ? undefined : `rotate(${formatNumber(angle)})` },
@@ -56,7 +63,7 @@ export const scanlines = ({
             ]
           : [],
         content: group([
-          content,
+          shape?.content ?? content,
           motion
             ? group([overlay], {
                 style: animationDeclaration(animationName, `${formatNumber(pitch / Math.max(speed, 0.1))}s`),

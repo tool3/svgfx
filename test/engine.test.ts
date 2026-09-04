@@ -51,7 +51,7 @@ test('merges consecutive filter effects into a single filter element', () => {
 })
 
 test('splits filters that are separated by a layer effect', () => {
-  const output = svgfx(SOURCE, [grayscale(), scanlines(), blur()])
+  const output = svgfx(SOURCE, [grayscale(), scanlines({ clip: 'viewport' }), blur()])
   assert.equal(count(output, '<filter '), 2)
 })
 

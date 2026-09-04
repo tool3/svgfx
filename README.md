@@ -133,12 +133,12 @@ URI-encoded by default (smaller and readable); pass `{ base64: true }` if you ne
 | Effect | Options |
 | ------ | ------- |
 | `grain` | `amount` `0.32`, `size` `0.8`, `monochrome` `true`, `blend` `'overlay'`, `animate` `false`, `speed` `12` |
-| `scanlines` | `gap` `4`, `thickness` `1.5`, `opacity` `0.28`, `color` `'#000000'`, `angle` `0`, `blend` `'multiply'`, `animate` `false`, `speed` `6` |
+| `scanlines` | `gap` `4`, `thickness` `1.5`, `opacity` `0.28`, `color` `'#000000'`, `angle` `0`, `blend` `'multiply'`, `animate` `false`, `speed` `6`, `clip` `'shape'` |
 | `chromaticAberration` | `offset` `2`, `angle` `0` |
 | `glitch` | `intensity` `0.5`, `slices` `7`, `colorShift` `true`, `animate` `false`, `speed` `1` |
 | `pixelate` | `size` `8` |
-| `halftone` | `size` `6`, `angle` `45`, `levels` `4`, `color` `'#111111'`, `background` `'#ffffff'`, `keepSource` `false` |
-| `vignette` | `amount` `0.65`, `radius` `0.6`, `softness` `0.7`, `color` `'#000000'` |
+| `halftone` | `size` `6`, `angle` `45`, `levels` `4`, `color` `'#111111'`, `background` `'#ffffff'`, `keepSource` `false`, `clip` `'shape'` |
+| `vignette` | `amount` `0.65`, `radius` `0.6`, `softness` `0.7`, `color` `'#000000'`, `clip` `'shape'` |
 | `outline` | `width` `2`, `color` `'#000000'`, `position` `'outside' \| 'inside'` |
 | `wave` | `amplitude` `12`, `frequency` `0.02`, `octaves` `2`, `animate` `false`, `speed` `0.15` |
 | `emboss` | `depth` `1`, `angle` `135`, `desaturate` `true` |
@@ -172,7 +172,7 @@ svgfx(source, [neon({ color: '#4cc9f0' })])
 ## Examples
 
 Every effect and preset ships as a runnable TypeScript script under
-[`examples/`](examples) — the linked name opens the code, which shows the exact options
+[`examples/`](https://github.com/tool3/svgfx/tree/master/examples) — the linked name opens the code, which shows the exact options
 used. Each script writes a before/after pair into `examples/svgs`, and runs as-is with
 no build step.
 
@@ -186,46 +186,46 @@ npm run gallery                     # side-by-side overview page
 
 | Example | Before | After |
 | ------- | ------ | ----- |
-| [`blur`](examples/effects/blur.ts) | <img src="examples/svgs/blur.before.svg" width="240" alt="blur before"> | <img src="examples/svgs/blur.after.svg" width="240" alt="blur after"> |
-| [`bloom`](examples/effects/bloom.ts) | <img src="examples/svgs/bloom.before.svg" width="240" alt="bloom before"> | <img src="examples/svgs/bloom.after.svg" width="240" alt="bloom after"> |
-| [`glow`](examples/effects/glow.ts) | <img src="examples/svgs/glow.before.svg" width="240" alt="glow before"> | <img src="examples/svgs/glow.after.svg" width="240" alt="glow after"> |
-| [`shadow`](examples/effects/shadow.ts) | <img src="examples/svgs/shadow.before.svg" width="240" alt="shadow before"> | <img src="examples/svgs/shadow.after.svg" width="240" alt="shadow after"> |
-| [`grayscale`](examples/effects/grayscale.ts) | <img src="examples/svgs/grayscale.before.svg" width="240" alt="grayscale before"> | <img src="examples/svgs/grayscale.after.svg" width="240" alt="grayscale after"> |
-| [`saturate`](examples/effects/saturate.ts) | <img src="examples/svgs/saturate.before.svg" width="240" alt="saturate before"> | <img src="examples/svgs/saturate.after.svg" width="240" alt="saturate after"> |
-| [`hue-rotate`](examples/effects/hue-rotate.ts) | <img src="examples/svgs/hue-rotate.before.svg" width="240" alt="hue-rotate before"> | <img src="examples/svgs/hue-rotate.after.svg" width="240" alt="hue-rotate after"> |
-| [`invert`](examples/effects/invert.ts) | <img src="examples/svgs/invert.before.svg" width="240" alt="invert before"> | <img src="examples/svgs/invert.after.svg" width="240" alt="invert after"> |
-| [`brightness`](examples/effects/brightness.ts) | <img src="examples/svgs/brightness.before.svg" width="240" alt="brightness before"> | <img src="examples/svgs/brightness.after.svg" width="240" alt="brightness after"> |
-| [`contrast`](examples/effects/contrast.ts) | <img src="examples/svgs/contrast.before.svg" width="240" alt="contrast before"> | <img src="examples/svgs/contrast.after.svg" width="240" alt="contrast after"> |
-| [`sepia`](examples/effects/sepia.ts) | <img src="examples/svgs/sepia.before.svg" width="240" alt="sepia before"> | <img src="examples/svgs/sepia.after.svg" width="240" alt="sepia after"> |
-| [`fade`](examples/effects/fade.ts) | <img src="examples/svgs/fade.before.svg" width="240" alt="fade before"> | <img src="examples/svgs/fade.after.svg" width="240" alt="fade after"> |
-| [`posterize`](examples/effects/posterize.ts) | <img src="examples/svgs/posterize.before.svg" width="240" alt="posterize before"> | <img src="examples/svgs/posterize.after.svg" width="240" alt="posterize after"> |
-| [`threshold`](examples/effects/threshold.ts) | <img src="examples/svgs/threshold.before.svg" width="240" alt="threshold before"> | <img src="examples/svgs/threshold.after.svg" width="240" alt="threshold after"> |
-| [`duotone`](examples/effects/duotone.ts) | <img src="examples/svgs/duotone.before.svg" width="240" alt="duotone before"> | <img src="examples/svgs/duotone.after.svg" width="240" alt="duotone after"> |
-| [`tint`](examples/effects/tint.ts) | <img src="examples/svgs/tint.before.svg" width="240" alt="tint before"> | <img src="examples/svgs/tint.after.svg" width="240" alt="tint after"> |
-| [`grain`](examples/effects/grain.ts) | <img src="examples/svgs/grain.before.svg" width="240" alt="grain before"> | <img src="examples/svgs/grain.after.svg" width="240" alt="grain after"> |
-| [`scanlines`](examples/effects/scanlines.ts) | <img src="examples/svgs/scanlines.before.svg" width="240" alt="scanlines before"> | <img src="examples/svgs/scanlines.after.svg" width="240" alt="scanlines after"> |
-| [`chromatic-aberration`](examples/effects/chromatic-aberration.ts) | <img src="examples/svgs/chromatic-aberration.before.svg" width="240" alt="chromatic-aberration before"> | <img src="examples/svgs/chromatic-aberration.after.svg" width="240" alt="chromatic-aberration after"> |
-| [`glitch`](examples/effects/glitch.ts) | <img src="examples/svgs/glitch.before.svg" width="240" alt="glitch before"> | <img src="examples/svgs/glitch.after.svg" width="240" alt="glitch after"> |
-| [`pixelate`](examples/effects/pixelate.ts) | <img src="examples/svgs/pixelate.before.svg" width="240" alt="pixelate before"> | <img src="examples/svgs/pixelate.after.svg" width="240" alt="pixelate after"> |
-| [`halftone`](examples/effects/halftone.ts) | <img src="examples/svgs/halftone.before.svg" width="240" alt="halftone before"> | <img src="examples/svgs/halftone.after.svg" width="240" alt="halftone after"> |
-| [`vignette`](examples/effects/vignette.ts) | <img src="examples/svgs/vignette.before.svg" width="240" alt="vignette before"> | <img src="examples/svgs/vignette.after.svg" width="240" alt="vignette after"> |
-| [`outline`](examples/effects/outline.ts) | <img src="examples/svgs/outline.before.svg" width="240" alt="outline before"> | <img src="examples/svgs/outline.after.svg" width="240" alt="outline after"> |
-| [`wave`](examples/effects/wave.ts) | <img src="examples/svgs/wave.before.svg" width="240" alt="wave before"> | <img src="examples/svgs/wave.after.svg" width="240" alt="wave after"> |
-| [`emboss`](examples/effects/emboss.ts) | <img src="examples/svgs/emboss.before.svg" width="240" alt="emboss before"> | <img src="examples/svgs/emboss.after.svg" width="240" alt="emboss after"> |
-| [`sharpen`](examples/effects/sharpen.ts) | <img src="examples/svgs/sharpen.before.svg" width="240" alt="sharpen before"> | <img src="examples/svgs/sharpen.after.svg" width="240" alt="sharpen after"> |
+| [`blur`](https://github.com/tool3/svgfx/blob/master/examples/effects/blur.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/blur.before.svg" width="240" alt="blur before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/blur.after.svg" width="240" alt="blur after"> |
+| [`bloom`](https://github.com/tool3/svgfx/blob/master/examples/effects/bloom.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/bloom.before.svg" width="240" alt="bloom before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/bloom.after.svg" width="240" alt="bloom after"> |
+| [`glow`](https://github.com/tool3/svgfx/blob/master/examples/effects/glow.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/glow.before.svg" width="240" alt="glow before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/glow.after.svg" width="240" alt="glow after"> |
+| [`shadow`](https://github.com/tool3/svgfx/blob/master/examples/effects/shadow.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/shadow.before.svg" width="240" alt="shadow before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/shadow.after.svg" width="240" alt="shadow after"> |
+| [`grayscale`](https://github.com/tool3/svgfx/blob/master/examples/effects/grayscale.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/grayscale.before.svg" width="240" alt="grayscale before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/grayscale.after.svg" width="240" alt="grayscale after"> |
+| [`saturate`](https://github.com/tool3/svgfx/blob/master/examples/effects/saturate.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/saturate.before.svg" width="240" alt="saturate before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/saturate.after.svg" width="240" alt="saturate after"> |
+| [`hue-rotate`](https://github.com/tool3/svgfx/blob/master/examples/effects/hue-rotate.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/hue-rotate.before.svg" width="240" alt="hue-rotate before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/hue-rotate.after.svg" width="240" alt="hue-rotate after"> |
+| [`invert`](https://github.com/tool3/svgfx/blob/master/examples/effects/invert.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/invert.before.svg" width="240" alt="invert before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/invert.after.svg" width="240" alt="invert after"> |
+| [`brightness`](https://github.com/tool3/svgfx/blob/master/examples/effects/brightness.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/brightness.before.svg" width="240" alt="brightness before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/brightness.after.svg" width="240" alt="brightness after"> |
+| [`contrast`](https://github.com/tool3/svgfx/blob/master/examples/effects/contrast.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/contrast.before.svg" width="240" alt="contrast before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/contrast.after.svg" width="240" alt="contrast after"> |
+| [`sepia`](https://github.com/tool3/svgfx/blob/master/examples/effects/sepia.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/sepia.before.svg" width="240" alt="sepia before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/sepia.after.svg" width="240" alt="sepia after"> |
+| [`fade`](https://github.com/tool3/svgfx/blob/master/examples/effects/fade.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/fade.before.svg" width="240" alt="fade before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/fade.after.svg" width="240" alt="fade after"> |
+| [`posterize`](https://github.com/tool3/svgfx/blob/master/examples/effects/posterize.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/posterize.before.svg" width="240" alt="posterize before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/posterize.after.svg" width="240" alt="posterize after"> |
+| [`threshold`](https://github.com/tool3/svgfx/blob/master/examples/effects/threshold.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/threshold.before.svg" width="240" alt="threshold before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/threshold.after.svg" width="240" alt="threshold after"> |
+| [`duotone`](https://github.com/tool3/svgfx/blob/master/examples/effects/duotone.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/duotone.before.svg" width="240" alt="duotone before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/duotone.after.svg" width="240" alt="duotone after"> |
+| [`tint`](https://github.com/tool3/svgfx/blob/master/examples/effects/tint.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/tint.before.svg" width="240" alt="tint before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/tint.after.svg" width="240" alt="tint after"> |
+| [`grain`](https://github.com/tool3/svgfx/blob/master/examples/effects/grain.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/grain.before.svg" width="240" alt="grain before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/grain.after.svg" width="240" alt="grain after"> |
+| [`scanlines`](https://github.com/tool3/svgfx/blob/master/examples/effects/scanlines.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/scanlines.before.svg" width="240" alt="scanlines before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/scanlines.after.svg" width="240" alt="scanlines after"> |
+| [`chromatic-aberration`](https://github.com/tool3/svgfx/blob/master/examples/effects/chromatic-aberration.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/chromatic-aberration.before.svg" width="240" alt="chromatic-aberration before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/chromatic-aberration.after.svg" width="240" alt="chromatic-aberration after"> |
+| [`glitch`](https://github.com/tool3/svgfx/blob/master/examples/effects/glitch.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/glitch.before.svg" width="240" alt="glitch before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/glitch.after.svg" width="240" alt="glitch after"> |
+| [`pixelate`](https://github.com/tool3/svgfx/blob/master/examples/effects/pixelate.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/pixelate.before.svg" width="240" alt="pixelate before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/pixelate.after.svg" width="240" alt="pixelate after"> |
+| [`halftone`](https://github.com/tool3/svgfx/blob/master/examples/effects/halftone.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/halftone.before.svg" width="240" alt="halftone before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/halftone.after.svg" width="240" alt="halftone after"> |
+| [`vignette`](https://github.com/tool3/svgfx/blob/master/examples/effects/vignette.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/vignette.before.svg" width="240" alt="vignette before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/vignette.after.svg" width="240" alt="vignette after"> |
+| [`outline`](https://github.com/tool3/svgfx/blob/master/examples/effects/outline.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/outline.before.svg" width="240" alt="outline before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/outline.after.svg" width="240" alt="outline after"> |
+| [`wave`](https://github.com/tool3/svgfx/blob/master/examples/effects/wave.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/wave.before.svg" width="240" alt="wave before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/wave.after.svg" width="240" alt="wave after"> |
+| [`emboss`](https://github.com/tool3/svgfx/blob/master/examples/effects/emboss.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/emboss.before.svg" width="240" alt="emboss before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/emboss.after.svg" width="240" alt="emboss after"> |
+| [`sharpen`](https://github.com/tool3/svgfx/blob/master/examples/effects/sharpen.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/sharpen.before.svg" width="240" alt="sharpen before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/sharpen.after.svg" width="240" alt="sharpen after"> |
 
 ### Preset examples
 
 | Example | Before | After |
 | ------- | ------ | ----- |
-| [`crt`](examples/presets/crt.ts) | <img src="examples/svgs/crt.before.svg" width="240" alt="crt before"> | <img src="examples/svgs/crt.after.svg" width="240" alt="crt after"> |
-| [`cyberpunk`](examples/presets/cyberpunk.ts) | <img src="examples/svgs/cyberpunk.before.svg" width="240" alt="cyberpunk before"> | <img src="examples/svgs/cyberpunk.after.svg" width="240" alt="cyberpunk after"> |
-| [`film`](examples/presets/film.ts) | <img src="examples/svgs/film.before.svg" width="240" alt="film before"> | <img src="examples/svgs/film.after.svg" width="240" alt="film after"> |
-| [`neon`](examples/presets/neon.ts) | <img src="examples/svgs/neon.before.svg" width="240" alt="neon before"> | <img src="examples/svgs/neon.after.svg" width="240" alt="neon after"> |
-| [`newsprint`](examples/presets/newsprint.ts) | <img src="examples/svgs/newsprint.before.svg" width="240" alt="newsprint before"> | <img src="examples/svgs/newsprint.after.svg" width="240" alt="newsprint after"> |
-| [`riso`](examples/presets/riso.ts) | <img src="examples/svgs/riso.before.svg" width="240" alt="riso before"> | <img src="examples/svgs/riso.after.svg" width="240" alt="riso after"> |
-| [`vhs`](examples/presets/vhs.ts) | <img src="examples/svgs/vhs.before.svg" width="240" alt="vhs before"> | <img src="examples/svgs/vhs.after.svg" width="240" alt="vhs after"> |
-| [`xerox`](examples/presets/xerox.ts) | <img src="examples/svgs/xerox.before.svg" width="240" alt="xerox before"> | <img src="examples/svgs/xerox.after.svg" width="240" alt="xerox after"> |
+| [`crt`](https://github.com/tool3/svgfx/blob/master/examples/presets/crt.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/crt.before.svg" width="240" alt="crt before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/crt.after.svg" width="240" alt="crt after"> |
+| [`cyberpunk`](https://github.com/tool3/svgfx/blob/master/examples/presets/cyberpunk.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/cyberpunk.before.svg" width="240" alt="cyberpunk before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/cyberpunk.after.svg" width="240" alt="cyberpunk after"> |
+| [`film`](https://github.com/tool3/svgfx/blob/master/examples/presets/film.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/film.before.svg" width="240" alt="film before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/film.after.svg" width="240" alt="film after"> |
+| [`neon`](https://github.com/tool3/svgfx/blob/master/examples/presets/neon.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/neon.before.svg" width="240" alt="neon before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/neon.after.svg" width="240" alt="neon after"> |
+| [`newsprint`](https://github.com/tool3/svgfx/blob/master/examples/presets/newsprint.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/newsprint.before.svg" width="240" alt="newsprint before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/newsprint.after.svg" width="240" alt="newsprint after"> |
+| [`riso`](https://github.com/tool3/svgfx/blob/master/examples/presets/riso.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/riso.before.svg" width="240" alt="riso before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/riso.after.svg" width="240" alt="riso after"> |
+| [`vhs`](https://github.com/tool3/svgfx/blob/master/examples/presets/vhs.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/vhs.before.svg" width="240" alt="vhs before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/vhs.after.svg" width="240" alt="vhs after"> |
+| [`xerox`](https://github.com/tool3/svgfx/blob/master/examples/presets/xerox.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/xerox.before.svg" width="240" alt="xerox before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/xerox.after.svg" width="240" alt="xerox after"> |
 
 ### Animated examples
 
@@ -234,8 +234,34 @@ columns are playing: the source keeps its motion, and the second adds svgfx's on
 
 | Example | Before | After |
 | ------- | ------ | ----- |
-| [`motion-crt`](examples/animated/preset-over-motion.ts) | <img src="examples/svgs/motion-crt.before.svg" width="240" alt="motion-crt before"> | <img src="examples/svgs/motion-crt.after.svg" width="240" alt="motion-crt after"> |
-| [`motion-layered`](examples/animated/layered-motion.ts) | <img src="examples/svgs/motion-layered.before.svg" width="240" alt="motion-layered before"> | <img src="examples/svgs/motion-layered.after.svg" width="240" alt="motion-layered after"> |
+| [`motion-crt`](https://github.com/tool3/svgfx/blob/master/examples/animated/preset-over-motion.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/motion-crt.before.svg" width="240" alt="motion-crt before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/motion-crt.after.svg" width="240" alt="motion-crt after"> |
+| [`motion-layered`](https://github.com/tool3/svgfx/blob/master/examples/animated/layered-motion.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/motion-layered.before.svg" width="240" alt="motion-layered before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/motion-layered.after.svg" width="240" alt="motion-layered after"> |
+
+## Overlays follow the artwork's shape
+
+Most effects are SVG filters, so they respect the artwork's alpha for free. Three of
+them — `scanlines`, `vignette` and `halftone` — work by laying something *over* the
+drawing, and a naive overlay is a rectangle. Point one at a rounded-console SVG, a logo
+on transparency, or anything with a non-rectangular silhouette, and the overlay would
+paint over the corners.
+
+It doesn't. Those effects mask their overlay with a silhouette taken from the artwork's
+own alpha at that point in the chain, so the overlay lands exactly where the drawing is
+and nowhere else — rounded corners, holes and soft edges included.
+
+```ts
+svgfx(roundedTerminalSvg, [scanlines()])
+```
+
+Pass `clip: 'viewport'` when you actually want the overlay to fill the whole frame:
+
+```ts
+svgfx(source, [scanlines({ clip: 'viewport' })])
+```
+
+The silhouette costs one extra render of the artwork per overlay effect (it is drawn
+once for the picture, once for the mask). `clip: 'viewport'` skips that, and it is the
+cheaper choice for full-bleed art where the two are identical anyway.
 
 ## Motion
 

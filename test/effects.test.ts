@@ -182,7 +182,8 @@ test('pixelate tiles a sampling grid in user space', () => {
 
 test('halftone builds one mask, cut filter and dot pattern per level', () => {
   const output = apply(halftone({ levels: 3, size: 4 }))
-  assert.equal(count(output, '<mask '), 3)
+  assert.equal(output.match(/<mask id="[^"]*halftone-mask/g)?.length, 3)
+  assert.equal(output.match(/<filter id="[^"]*halftone-cut/g)?.length, 3)
   assert.equal(count(output, '<pattern '), 3)
   assert.equal(count(output, '<circle '), 3)
 })
@@ -249,4 +250,36 @@ test('every effect leaves the source artwork present in the output', () => {
   effects.forEach((effect) => {
     assert.match(apply(effect), /<rect width="100" height="60"\/>/)
   })
+})
+
+test('scanlines follow the artwork silhouette by default', () => {
+  const output = apply(scanlines())
+  assert.match(output, /<mask [^>]*id="svgfx-[^"]*shape-mask/)
+  assert.match(output, /<rect[^>]*mask="url\(#svgfx-[^"]*shape-mask[^"]*\)"/)
+  assert.match(output, /<feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0"/)
+})
+
+test('scanlines can cover the whole viewport instead', () => {
+  const output = apply(scanlines({ clip: 'viewport' }))
+  assert.equal(count(output, 'shape-mask'), 0)
+  assert.match(output, /<rect x="0" y="0" width="100" height="60"/)
+})
+
+test('vignette follows the silhouette by default and can opt out', () => {
+  assert.match(apply(vignette()), /mask="url\(#svgfx-[^"]*shape-mask[^"]*\)"/)
+  assert.equal(count(apply(vignette({ clip: 'viewport' })), 'shape-mask'), 0)
+})
+
+test('halftone masks its paper backdrop to the silhouette', () => {
+  const output = apply(halftone({ background: '#ffffff' }))
+  assert.match(output, /<rect[^>]*fill="#ffffff"[^>]*mask="url\(#svgfx-[^"]*shape-mask/)
+})
+
+test('halftone with a null background paints no backdrop', () => {
+  assert.equal(count(apply(halftone({ background: null })), 'fill="#ffffff"'), 0)
+})
+
+test('the silhouette references the artwork exactly once per overlay', () => {
+  const output = apply(scanlines())
+  assert.equal(count(output, '<use href="#svgfx'), 1)
 })
