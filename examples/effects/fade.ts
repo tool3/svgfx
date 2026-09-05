@@ -1,8 +1,4 @@
 import { svgfx, fade } from '../../src/index.ts'
-import { load, save } from '../support.ts'
+import { render } from '../support.ts'
 
-const source = load('mark.svg')
-
-const output = svgfx(source, [fade({ amount: 0.45 })])
-
-save('fade', source, output)
+render('fade', 'mark.svg', (source) => svgfx(source, [fade({ amount: 0.45 })]))

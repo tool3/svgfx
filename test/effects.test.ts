@@ -30,6 +30,7 @@ import { outline } from '../src/effects/outline.ts'
 import { wave } from '../src/effects/wave.ts'
 import { emboss, sharpen } from '../src/effects/relief.ts'
 import { crt, cyberpunk, film, neon, newsprint, riso, vhs, xerox } from '../src/presets/index.ts'
+import { CRT_DEFAULTS, FILM_DEFAULTS } from '../src/presets/index.ts'
 import type { Effect } from '../src/core/types.ts'
 
 const SOURCE = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 60"><rect width="100" height="60"/></svg>'
@@ -361,4 +362,49 @@ test('an effect can still opt into shape following when settings say none', () =
 test('an effect can opt out while the frame clip stays on', () => {
   const output = svgfx(ROUNDED, [scanlines({ clip: 'viewport' })], { seed: 'test' })
   assert.equal(count(output, 'clip-path="url('), 1)
+})
+
+test('a preset renders identically whether or not an empty options object is passed', () => {
+  assert.equal(apply(film()), apply(film({})))
+})
+
+test('a preset effect can be tuned without touching the rest of the recipe', () => {
+  const stock = apply(film())
+  const tuned = apply(film({ grain: { amount: 0.9 } }))
+  assert.notEqual(stock, tuned)
+  assert.match(tuned, /<feFuncR type="linear" slope="0.9"/)
+  assert.match(tuned, /<feGaussianBlur[^>]*stdDeviation="6"/)
+})
+
+test('an override merges over the preset value rather than replacing the whole effect', () => {
+  const output = apply(film({ bloom: { radius: 14 } }))
+  assert.match(output, /<feGaussianBlur[^>]*stdDeviation="14"/)
+  assert.match(output, /<feFuncR type="linear" slope="3.125" intercept="-2.125"\/>/)
+})
+
+test('every preset accepts an override for each effect it contains', () => {
+  assert.match(apply(crt({ scanlines: { gap: 9 } })), /width="9" height="9"/)
+  assert.match(apply(vhs({ wave: { amplitude: 30 } })), /scale="30"/)
+  assert.match(apply(riso({ posterize: { steps: 7 } })), /tableValues="0 0.1667 0.3333 0.5 0.6667 0.8333 1"/)
+  assert.match(apply(xerox({ threshold: { level: 0.2 } })), /intercept="-50.5"/)
+  assert.match(apply(neon({ glow: { radius: 20 } })), /stdDeviation="20"/)
+  assert.match(apply(newsprint({ halftone: { size: 9 } })), /width="9" height="9"/)
+  assert.match(apply(cyberpunk({ glitch: { slices: 3 } })), /clip/)
+  assert.match(apply(film({ vignette: { color: '#123456' } })), /stop-color="#123456"/)
+})
+
+test('the shorthand options still work and the per-effect override wins', () => {
+  assert.equal(count(apply(crt({ animate: true })), '@keyframes'), 1)
+  assert.equal(count(apply(crt({ animate: true, scanlines: { animate: false } })), '@keyframes'), 0)
+  assert.match(apply(riso({ shadow: '#001122' })), /tableValues="0 1"/)
+  assert.match(apply(riso({ shadow: '#001122', duotone: { shadow: '#ffffff' } })), /tableValues="1 1"/)
+  assert.match(apply(neon({ color: '#ff0000' })), /flood-color="#ff0000"/)
+  assert.match(apply(neon({ color: '#ff0000', glow: { color: '#00ff00' } })), /flood-color="#00ff00"/)
+})
+
+test('the exported defaults match what the preset actually applies', () => {
+  assert.equal(FILM_DEFAULTS.bloom.radius, 6)
+  assert.equal(CRT_DEFAULTS.scanlines.gap, 3)
+  assert.match(apply(film({ bloom: { radius: FILM_DEFAULTS.bloom.radius } })), /stdDeviation="6"/)
+  assert.equal(apply(film()), apply(film({ bloom: { ...FILM_DEFAULTS.bloom } })))
 })

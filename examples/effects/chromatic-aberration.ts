@@ -1,8 +1,4 @@
 import { svgfx, chromaticAberration } from '../../src/index.ts'
-import { load, save } from '../support.ts'
+import { render } from '../support.ts'
 
-const source = load('scene.svg')
-
-const output = svgfx(source, [chromaticAberration({ offset: 1 })])
-
-save('chromatic-aberration', source, output)
+render('chromatic-aberration', 'scene.svg', (source) => svgfx(source, [chromaticAberration({ offset: 1 })]))

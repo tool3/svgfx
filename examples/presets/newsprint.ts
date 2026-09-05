@@ -1,8 +1,4 @@
 import { svgfx, newsprint } from '../../src/index.ts'
-import { load, save } from '../support.ts'
+import { render } from '../support.ts'
 
-const source = load('tones.svg')
-
-const output = svgfx(source, [newsprint()])
-
-save('newsprint', source, output)
+render('newsprint', 'tones.svg', (source) => svgfx(source, [newsprint()]))

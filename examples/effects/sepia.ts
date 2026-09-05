@@ -1,8 +1,4 @@
 import { svgfx, sepia } from '../../src/index.ts'
-import { load, save } from '../support.ts'
+import { render } from '../support.ts'
 
-const source = load('scene.svg')
-
-const output = svgfx(source, [sepia()])
-
-save('sepia', source, output)
+render('sepia', 'scene.svg', (source) => svgfx(source, [sepia()]))

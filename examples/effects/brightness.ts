@@ -1,8 +1,4 @@
 import { svgfx, brightness } from '../../src/index.ts'
-import { load, save } from '../support.ts'
+import { render } from '../support.ts'
 
-const source = load('scene.svg')
-
-const output = svgfx(source, [brightness({ amount: 1.35 })])
-
-save('brightness', source, output)
+render('brightness', 'scene.svg', (source) => svgfx(source, [brightness({ amount: 1.35 })]))

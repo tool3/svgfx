@@ -18,6 +18,8 @@ const mark = read('mark.svg')
 
 const motion = read('motion.svg')
 
+const tetra = read('tetrahedron.svg')
+
 const tones = read('tones.svg')
 
 const sceneVariants: readonly Variant[] = [
@@ -78,6 +80,15 @@ const toneVariants: readonly Variant[] = [
   ['tones: preset riso', [svgfx.riso()]],
 ]
 
+const tetraVariants: readonly Variant[] = [
+  ['3d: original', []],
+  ['3d: crt', [svgfx.crt()]],
+  ['3d: neon', [svgfx.neon()]],
+  ['3d: riso', [svgfx.riso()]],
+  ['3d: halftone', [svgfx.halftone({ size: 5 })]],
+  ['3d: film tuned', [svgfx.film({ grain: { size: 1.2 } })]],
+]
+
 const motionVariants: readonly Variant[] = [
   ['motion: original', []],
   ['motion: crt', [svgfx.crt()]],
@@ -123,6 +134,7 @@ const page = `<!doctype html>
 ${section('Scene', sceneVariants.map(card(scene)))}
 ${section('Mark', markVariants.map(card(mark)))}
 ${section('Tones', toneVariants.map(card(tones)))}
+${section('Spinning solid', tetraVariants.map(card(tetra)))}
 ${section('Already animated', motionVariants.map(card(motion)))}
 </body>
 </html>
@@ -131,5 +143,5 @@ ${section('Already animated', motionVariants.map(card(motion)))}
 writeFileSync(join(here, '..', 'examples', 'gallery.html'), page)
 
 console.log(
-  `Wrote examples/gallery.html with ${sceneVariants.length + markVariants.length + toneVariants.length + motionVariants.length} variants.`,
+  `Wrote examples/gallery.html with ${sceneVariants.length + markVariants.length + toneVariants.length + tetraVariants.length + motionVariants.length} variants.`,
 )

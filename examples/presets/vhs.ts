@@ -1,8 +1,4 @@
 import { svgfx, vhs } from '../../src/index.ts'
-import { load, save } from '../support.ts'
+import { render } from '../support.ts'
 
-const source = load('scene.svg')
-
-const output = svgfx(source, [vhs()])
-
-save('vhs', source, output)
+render('vhs', 'scene.svg', (source) => svgfx(source, [vhs()]))

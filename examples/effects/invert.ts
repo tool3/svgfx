@@ -1,8 +1,4 @@
 import { svgfx, invert } from '../../src/index.ts'
-import { load, save } from '../support.ts'
+import { render } from '../support.ts'
 
-const source = load('scene.svg')
-
-const output = svgfx(source, [invert()])
-
-save('invert', source, output)
+render('invert', 'scene.svg', (source) => svgfx(source, [invert()]))

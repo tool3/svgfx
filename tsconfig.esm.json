@@ -2,7 +2,7 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "module": "nodenext",
-    "types": [],
+    "types": ["node"],
     "moduleResolution": "nodenext",
     "noEmit": false,
     "declaration": true,

@@ -1,8 +1,4 @@
 import { svgfx, xerox } from '../../src/index.ts'
-import { load, save } from '../support.ts'
+import { render } from '../support.ts'
 
-const source = load('tones.svg')
-
-const output = svgfx(source, [xerox()])
-
-save('xerox', source, output)
+render('xerox', 'tones.svg', (source) => svgfx(source, [xerox()]))

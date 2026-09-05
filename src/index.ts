@@ -124,4 +124,24 @@ export { emboss, sharpen } from './effects/relief.ts'
 export type { EmbossOptions, SharpenOptions } from './effects/relief.ts'
 
 export { crt, cyberpunk, film, neon, newsprint, riso, vhs, xerox } from './presets/index.ts'
-export type { MotionOptions, NeonOptions, RisoOptions } from './presets/index.ts'
+export {
+  CRT_DEFAULTS,
+  CYBERPUNK_DEFAULTS,
+  FILM_DEFAULTS,
+  NEON_DEFAULTS,
+  NEWSPRINT_DEFAULTS,
+  RISO_DEFAULTS,
+  VHS_DEFAULTS,
+  XEROX_DEFAULTS,
+} from './presets/index.ts'
+export type {
+  CrtOptions,
+  CyberpunkOptions,
+  FilmOptions,
+  MotionOptions,
+  NeonOptions,
+  NewsprintOptions,
+  RisoOptions,
+  VhsOptions,
+  XeroxOptions,
+} from './presets/index.ts'
