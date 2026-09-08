@@ -68,5 +68,8 @@
   "devDependencies": {
     "@types/node": "^26.4.1",
     "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "gradient-string": "^3.0.0"
   }
 }

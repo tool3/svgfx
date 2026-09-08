@@ -4,7 +4,10 @@
 
 `svgfx(logo, [crt()])`
 
-<img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/matrix-layered.after.svg" width="420" alt="crt preset">
+<!-- <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/matrix-layered.after.svg" width="420" alt="crt preset"> -->
+<!-- <img src="https://shellfied.vercel.app/s/lLOmfrJ.svg" width="420" alt="crt preset"> -->
+<!-- <img src="https://shellfied.vercel.app/s/G0RAVq1.svg" width="420" alt="crt preset"> -->
+<img src="https://shellfied.vercel.app/s/wYoZ1Sb.svg" width="420" alt="crt preset">
 
 ### Post-processing effects for any SVG.
 
