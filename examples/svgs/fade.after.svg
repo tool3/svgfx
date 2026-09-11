@@ -2,4 +2,4 @@
   
   
   
-<defs><filter id="svgfx-1a1vac-filter-0" color-interpolation-filters="sRGB"><feComponentTransfer in="SourceGraphic" result="svgfx-out-0"><feFuncA type="linear" slope="0.45"/></feComponentTransfer></filter></defs><g filter="url(#svgfx-1a1vac-filter-0)"><circle cx="88" cy="80" r="38" fill="#f25c54"/><rect x="130" y="46" width="68" height="68" rx="10" fill="#4cc9f0"/><path d="M40 132 L120 132 L80 40 Z" fill="none" stroke="#ffd166" stroke-width="6" stroke-linejoin="round"/></g></svg>
+<defs><filter id="pstfx-tvjt82-filter-0" color-interpolation-filters="sRGB"><feComponentTransfer in="SourceGraphic" result="pstfx-out-0"><feFuncA type="linear" slope="0.45"/></feComponentTransfer></filter></defs><g filter="url(#pstfx-tvjt82-filter-0)"><circle cx="88" cy="80" r="38" fill="#f25c54"/><rect x="130" y="46" width="68" height="68" rx="10" fill="#4cc9f0"/><path d="M40 132 L120 132 L80 40 Z" fill="none" stroke="#ffd166" stroke-width="6" stroke-linejoin="round"/></g></svg>

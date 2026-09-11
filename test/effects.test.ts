@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { svgfx } from '../src/core/api.ts'
+import { pstfx } from '../src/core/api.ts'
 import { blur } from '../src/effects/blur.ts'
 import { bloom } from '../src/effects/bloom.ts'
 import { glow } from '../src/effects/glow.ts'
@@ -41,7 +41,7 @@ const NO_BACKDROP =
 const ROUNDED =
   '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 60"><g transform="translate(0,0)"><rect width="100" height="60" rx="8" fill="#111"/><circle cx="50" cy="30" r="8" fill="#fff"/></g></svg>'
 
-const apply = (effect: Effect): string => svgfx(SOURCE, [effect], { seed: 'test' })
+const apply = (effect: Effect): string => pstfx(SOURCE, [effect], { seed: 'test' })
 
 const count = (haystack: string, needle: string): number => haystack.split(needle).length - 1
 
@@ -150,7 +150,7 @@ test('scanlines adds a tiled pattern overlay', () => {
 
 test('scanlines rolls with a self contained keyframe animation', () => {
   const output = apply(scanlines({ animate: true, gap: 4 }))
-  assert.match(output, /@keyframes svgfx-[^{]+\{from\{transform:translateY\(0\)\}to\{transform:translateY\(4px\)\}\}/)
+  assert.match(output, /@keyframes pstfx-[^{]+\{from\{transform:translateY\(0\)\}to\{transform:translateY\(4px\)\}\}/)
 })
 
 test('scanlines rotates the pattern for angled lines', () => {
@@ -167,7 +167,7 @@ test('chromatic aberration splits and recombines the channels', () => {
 test('glitch slices the artwork into clipped bands', () => {
   const output = apply(glitch({ intensity: 1, slices: 8 }))
   assert.ok(count(output, '<clipPath') > 0)
-  assert.ok(count(output, '<use href="#svgfx') > 0)
+  assert.ok(count(output, '<use href="#pstfx') > 0)
 })
 
 test('glitch can drop the colour shift', () => {
@@ -205,7 +205,7 @@ test('halftone dots grow with each darker level', () => {
 test('halftone keeps the source artwork when asked', () => {
   const output = apply(halftone({ keepSource: true }))
   assert.equal(count(output, '<g><rect width="100" height="60"/></g>'), 0)
-  assert.match(output, /id="svgfx-[^"]*halftone-source[^"]*"><rect width="100" height="60"\/>/)
+  assert.match(output, /id="pstfx-[^"]*halftone-source[^"]*"><rect width="100" height="60"\/>/)
 })
 
 test('vignette overlays a radial gradient', () => {
@@ -261,106 +261,106 @@ test('every effect leaves the source artwork present in the output', () => {
   })
 })
 
-const onNoBackdrop = (effect: Effect): string => svgfx(NO_BACKDROP, [effect], { seed: 'test' })
+const onNoBackdrop = (effect: Effect): string => pstfx(NO_BACKDROP, [effect], { seed: 'test' })
 
 test('overlays share one clip definition with the frame clip', () => {
-  const output = svgfx(SOURCE, [scanlines(), vignette()], { seed: 'test' })
+  const output = pstfx(SOURCE, [scanlines(), vignette()], { seed: 'test' })
   assert.equal(count(output, '<clipPath'), 1)
   assert.equal(count(output, 'clip-path="url('), 3)
 })
 
 test('overlays clip flush to a detected backdrop rect', () => {
   const output = apply(scanlines())
-  assert.match(output, /<clipPath id="svgfx-[^"]*-clip" clipPathUnits="userSpaceOnUse"><rect width="100" height="60"\/><\/clipPath>/)
-  assert.match(output, /<rect[^>]*clip-path="url\(#svgfx-[^"]*-clip\)"/)
+  assert.match(output, /<clipPath id="pstfx-[^"]*-clip" clipPathUnits="userSpaceOnUse"><rect width="100" height="60"\/><\/clipPath>/)
+  assert.match(output, /<rect[^>]*clip-path="url\(#pstfx-[^"]*-clip\)"/)
   assert.equal(count(output, 'shape-mask'), 0)
 })
 
 test('a rounded backdrop is carried into the clip path with its corner radius', () => {
-  const output = svgfx(ROUNDED, [scanlines()], { seed: 'test' })
+  const output = pstfx(ROUNDED, [scanlines()], { seed: 'test' })
   assert.match(output, /<clipPath[^>]*><rect width="100" height="60" rx="8"\/><\/clipPath>/)
 })
 
 test('detection sees through wrapping groups and identity translates', () => {
   const wrapped = ROUNDED.replace('translate(0,0)', 'translate(0, 0)')
-  assert.match(svgfx(wrapped, [scanlines()], { seed: 'test' }), /<rect width="100" height="60" rx="8"\/>/)
+  assert.match(pstfx(wrapped, [scanlines()], { seed: 'test' }), /<rect width="100" height="60" rx="8"\/>/)
 })
 
 test('a real translate is folded into the clip shape', () => {
   const shifted =
     '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 60"><g transform="translate(0,0)"><rect width="100" height="60" rx="4"/></g></svg>'
-  assert.match(svgfx(shifted, [scanlines()], { seed: 'test' }), /<rect width="100" height="60" rx="4"\/>/)
+  assert.match(pstfx(shifted, [scanlines()], { seed: 'test' }), /<rect width="100" height="60" rx="4"\/>/)
 })
 
 test('artwork with no backdrop falls back to an alpha silhouette mask', () => {
   const output = onNoBackdrop(scanlines())
   assert.equal(count(output, '<clipPath'), 0)
-  assert.match(output, /<mask id="svgfx-[^"]*shape-mask/)
+  assert.match(output, /<mask id="pstfx-[^"]*shape-mask/)
   assert.match(output, /<feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0"/)
-  assert.match(output, /mask="url\(#svgfx-[^"]*shape-mask[^"]*\)"/)
+  assert.match(output, /mask="url\(#pstfx-[^"]*shape-mask[^"]*\)"/)
 })
 
 test('an unpainted backdrop rect is not mistaken for the silhouette', () => {
   const outlineOnly =
     '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 60"><rect width="100" height="60" fill="none" stroke="#000"/><circle cx="50" cy="30" r="9"/></svg>'
-  assert.equal(count(svgfx(outlineOnly, [scanlines()], { seed: 'test' }), '<clipPath'), 0)
+  assert.equal(count(pstfx(outlineOnly, [scanlines()], { seed: 'test' }), '<clipPath'), 0)
 })
 
 test('clip viewport opts the overlay out of following the shape', () => {
-  const output = svgfx(SOURCE, [scanlines({ clip: 'viewport' })], { seed: 'test', clip: 'none' })
+  const output = pstfx(SOURCE, [scanlines({ clip: 'viewport' })], { seed: 'test', clip: 'none' })
   assert.equal(count(output, '<clipPath'), 0)
   assert.equal(count(output, 'shape-mask'), 0)
 })
 
 test('the finished result is clipped to the detected frame', () => {
-  const output = svgfx(ROUNDED, [bloom({ radius: 10 })], { seed: 'test' })
+  const output = pstfx(ROUNDED, [bloom({ radius: 10 })], { seed: 'test' })
   assert.match(output, /<clipPath[^>]*><rect width="100" height="60" rx="8"\/><\/clipPath>/)
-  assert.match(output, /<g filter="url\([^)]*\)" clip-path="url\(#svgfx-[^"]*-clip\)"/)
+  assert.match(output, /<g filter="url\([^)]*\)" clip-path="url\(#pstfx-[^"]*-clip\)"/)
 })
 
 test('a filter that spills past the frame is trimmed to it', () => {
-  const spilling = svgfx(ROUNDED, [glow({ radius: 12, color: '#ff0000' })], { seed: 'test' })
-  assert.match(spilling, /clip-path="url\(#svgfx-[^"]*-clip\)"/)
+  const spilling = pstfx(ROUNDED, [glow({ radius: 12, color: '#ff0000' })], { seed: 'test' })
+  assert.match(spilling, /clip-path="url\(#pstfx-[^"]*-clip\)"/)
 })
 
 test('frame clipping can be turned off entirely', () => {
-  const output = svgfx(ROUNDED, [bloom({ radius: 10 })], { seed: 'test', clip: 'none' })
+  const output = pstfx(ROUNDED, [bloom({ radius: 10 })], { seed: 'test', clip: 'none' })
   assert.equal(count(output, '<clipPath'), 0)
 })
 
 test('artwork with no frame is never clipped, so glows still spill', () => {
-  const output = svgfx(NO_BACKDROP, [glow({ radius: 8 })], { seed: 'test' })
+  const output = pstfx(NO_BACKDROP, [glow({ radius: 8 })], { seed: 'test' })
   assert.equal(count(output, 'clip-path="url('), 0)
 })
 
 test('vignette and halftone follow the shape the same way', () => {
-  assert.match(apply(vignette()), /clip-path="url\(#svgfx-[^"]*-clip\)/)
-  assert.match(apply(halftone({ background: '#ffffff' })), /<rect[^>]*fill="#ffffff"[^>]*clip-path="url\(#svgfx/)
-  assert.match(onNoBackdrop(vignette()), /mask="url\(#svgfx-[^"]*shape-mask/)
+  assert.match(apply(vignette()), /clip-path="url\(#pstfx-[^"]*-clip\)/)
+  assert.match(apply(halftone({ background: '#ffffff' })), /<rect[^>]*fill="#ffffff"[^>]*clip-path="url\(#pstfx/)
+  assert.match(onNoBackdrop(vignette()), /mask="url\(#pstfx-[^"]*shape-mask/)
 })
 
 test('the root clip-path is reused when the artwork declares one', () => {
   const rootClipped =
     '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 60" clip-path="url(#frame)"><defs><clipPath id="frame"><rect width="100" height="60" rx="6"/></clipPath></defs><circle cx="50" cy="30" r="9"/></svg>'
-  const output = svgfx(rootClipped, [scanlines()], { seed: 'test' })
+  const output = pstfx(rootClipped, [scanlines()], { seed: 'test' })
   assert.match(output, /<rect[^>]*clip-path="url\(#frame\)"/)
   assert.equal(count(output, 'shape-mask'), 0)
 })
 
 test('settings clip none turns off both the frame clip and overlay shaping', () => {
-  const output = svgfx(ROUNDED, [scanlines(), vignette()], { seed: 'test', clip: 'none' })
+  const output = pstfx(ROUNDED, [scanlines(), vignette()], { seed: 'test', clip: 'none' })
   assert.equal(count(output, '<clipPath'), 0)
   assert.equal(count(output, 'shape-mask'), 0)
 })
 
 test('an effect can still opt into shape following when settings say none', () => {
-  const output = svgfx(ROUNDED, [scanlines({ clip: 'shape' })], { seed: 'test', clip: 'none' })
+  const output = pstfx(ROUNDED, [scanlines({ clip: 'shape' })], { seed: 'test', clip: 'none' })
   assert.equal(count(output, '<clipPath'), 1)
-  assert.match(output, /<rect[^>]*clip-path="url\(#svgfx-[^"]*-clip\)"/)
+  assert.match(output, /<rect[^>]*clip-path="url\(#pstfx-[^"]*-clip\)"/)
 })
 
 test('an effect can opt out while the frame clip stays on', () => {
-  const output = svgfx(ROUNDED, [scanlines({ clip: 'viewport' })], { seed: 'test' })
+  const output = pstfx(ROUNDED, [scanlines({ clip: 'viewport' })], { seed: 'test' })
   assert.equal(count(output, 'clip-path="url('), 1)
 })
 

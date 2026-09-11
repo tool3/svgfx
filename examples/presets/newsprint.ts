@@ -1,4 +1,4 @@
-import { svgfx, newsprint } from '../../src/index.ts'
+import { pstfx, newsprint } from '../../src/index.ts'
 import { render } from '../support.ts'
 
-render('newsprint', 'tones.svg', (source) => svgfx(source, [newsprint()]))
+render('newsprint', 'tones.svg', (source) => pstfx(source, [newsprint()]))

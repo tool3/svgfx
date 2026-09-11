@@ -1,4 +1,4 @@
-import { svgfx, hueRotate } from '../../src/index.ts'
+import { pstfx, hueRotate } from '../../src/index.ts'
 import { render } from '../support.ts'
 
-render('hue-rotate', 'scene.svg', (source) => svgfx(source, [hueRotate({ angle: 140 })]))
+render('hue-rotate', 'scene.svg', (source) => pstfx(source, [hueRotate({ angle: 140 })]))

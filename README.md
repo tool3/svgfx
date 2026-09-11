@@ -1,10 +1,10 @@
 <div align="center">
 
-# @svgfx/postprocessing
+# pstfx
 
-`svgfx(logo, [crt()])`
+`pstfx(logo, [crt()])`
 
-<!-- <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/matrix-layered.after.svg" width="420" alt="crt preset"> -->
+<!-- <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/matrix-layered.after.svg" width="420" alt="crt preset"> -->
 <!-- <img src="https://shellfied.vercel.app/s/lLOmfrJ.svg" width="420" alt="crt preset"> -->
 <!-- <img src="https://shellfied.vercel.app/s/G0RAVq1.svg" width="420" alt="crt preset"> -->
 <img src="https://shellfied.vercel.app/s/wYoZ1Sb.svg" width="420" alt="crt preset">
@@ -14,7 +14,7 @@
 Give it an SVG, get back an SVG — now with scanlines, bloom, glitch, halftone or a
 dozen other looks baked in. Still vector, still editable, no rasterizing, no DOM.
 
-[![npm](https://img.shields.io/npm/v/@svgfx/postprocessing)](https://www.npmjs.com/package/@svgfx/postprocessing)
+[![npm](https://img.shields.io/npm/v/pstfx)](https://www.npmjs.com/package/pstfx)
 [![license](https://img.shields.io/badge/license-MIT-orange)](./LICENSE)
 
 </div>
@@ -52,26 +52,26 @@ dozen other looks baked in. Still vector, still editable, no rasterizing, no DOM
 ## Installation
 
 ```bash
-npm install @svgfx/postprocessing
+npm install pstfx
 ```
 
 ## Quick start
 
 ```ts
 import { readFileSync, writeFileSync } from 'node:fs'
-import { svgfx, crt } from '@svgfx/postprocessing'
+import { pstfx, crt } from 'pstfx'
 
 const source = readFileSync('logo.svg', 'utf8')
 
-writeFileSync('logo-crt.svg', svgfx(source, [crt()]))
+writeFileSync('logo-crt.svg', pstfx(source, [crt()]))
 ```
 
 Effects are applied in order, exactly as you would stack them in an editor:
 
 ```ts
-import { svgfx, duotone, halftone, grain } from '@svgfx/postprocessing'
+import { pstfx, duotone, halftone, grain } from 'pstfx'
 
-const poster = svgfx(source, [
+const poster = pstfx(source, [
   duotone({ shadow: '#111d4a', highlight: '#ff6b6b' }),
   halftone({ size: 5, angle: 15 }),
   grain({ amount: 0.4 }),
@@ -80,12 +80,12 @@ const poster = svgfx(source, [
 
 ## API
 
-### `svgfx(source, effects?, settings?)`
+### `pstfx(source, effects?, settings?)`
 
 Takes an SVG string, returns an SVG string.
 
 ```ts
-const output = svgfx(source, [bloom()], { seed: 'hero', format: 'pretty' })
+const output = pstfx(source, [bloom()], { seed: 'hero', format: 'pretty' })
 ```
 
 ### `createPipeline(effects, settings?)`
@@ -93,7 +93,7 @@ const output = svgfx(source, [bloom()], { seed: 'hero', format: 'pretty' })
 A reusable, named stack of effects. Build it once, apply it to many files.
 
 ```ts
-import { createPipeline, duotone, grain } from '@svgfx/postprocessing'
+import { createPipeline, duotone, grain } from 'pstfx'
 
 const brand = createPipeline([duotone({ shadow: '#001427' }), grain()], { seed: 'brand' })
 
@@ -112,7 +112,7 @@ export const houseStyle = compose('house-style', [contrast({ amount: 1.1 }), gra
 ### `toDataUri(svg, options?)`
 
 ```ts
-element.style.backgroundImage = `url("${toDataUri(svgfx(source, [crt()]))}")`
+element.style.backgroundImage = `url("${toDataUri(pstfx(source, [crt()]))}")`
 ```
 
 URI-encoded by default (smaller and readable); pass `{ base64: true }` if you need it.
@@ -121,9 +121,9 @@ URI-encoded by default (smaller and readable); pass `{ base64: true }` if you ne
 
 | Setting   | Default      | What it does |
 | --------- | ------------ | ------------ |
-| `seed`    | `'svgfx'`   | Seeds every random decision. Change it to reroll a glitch or a grain field; keep it to get the same output forever. |
-| `prefix`  | `'svgfx'`   | Prefix for every generated id and class. |
-| `scope`   | auto         | Id namespace. Derived from the source, seed and effects so several svgfx outputs can be inlined in one page without colliding. Set it yourself for stable, readable ids. |
+| `seed`    | `'pstfx'`   | Seeds every random decision. Change it to reroll a glitch or a grain field; keep it to get the same output forever. |
+| `prefix`  | `'pstfx'`   | Prefix for every generated id and class. |
+| `scope`   | auto         | Id namespace. Derived from the source, seed and effects so several pstfx outputs can be inlined in one page without colliding. Set it yourself for stable, readable ids. |
 | `clip`    | `'shape'`    | Trim the finished result to the artwork's own frame, so the output silhouette matches the input exactly. `'none'` lets effects spill past it. |
 | `animate` | `true`       | Global switch for motion. `false` strips animation from every effect that asked for it — useful for print, PDF or snapshot tests. |
 | `format`  | `'preserve'` | `'preserve'` keeps the input's whitespace, `'pretty'` re-indents, `'minify'` drops comments and layout whitespace. |
@@ -179,11 +179,11 @@ Every option is optional. `bloom()` on its own is tuned to look right.
 Finished looks, each one a `compose` of the effects above.
 
 ```ts
-import { crt, vhs, riso, xerox, neon, film, newsprint, cyberpunk } from '@svgfx/postprocessing'
+import { crt, vhs, riso, xerox, neon, film, newsprint, cyberpunk } from 'pstfx'
 
-svgfx(source, [crt({ animate: true })])
-svgfx(source, [riso({ shadow: '#2b3a67', highlight: '#ff5a5f' })])
-svgfx(source, [neon({ color: '#4cc9f0' })])
+pstfx(source, [crt({ animate: true })])
+pstfx(source, [riso({ shadow: '#2b3a67', highlight: '#ff5a5f' })])
+pstfx(source, [neon({ color: '#4cc9f0' })])
 ```
 
 | Preset | Look |
@@ -203,7 +203,7 @@ A preset is a stack of effects, and every one of them is reachable by name. Over
 effect you want to move and the rest of the recipe stays put:
 
 ```ts
-svgfx(source, [film({ grain: { amount: 0.5 } })])
+pstfx(source, [film({ grain: { amount: 0.5 } })])
 ```
 
 Overrides merge over the preset's values rather than replacing the effect, so changing
@@ -211,7 +211,7 @@ one knob keeps the others. `film` runs bloom at `radius: 6, threshold: 0.68` —
 the radius and keeps the threshold:
 
 ```ts
-svgfx(source, [film({ bloom: { radius: 14 } })])
+pstfx(source, [film({ bloom: { radius: 14 } })])
 ```
 
 Each preset's options type lists exactly the effects it contains, so editors autocomplete
@@ -232,7 +232,7 @@ Every preset's own values are exported, so you can read what you are overriding,
 variant from them, or drive a UI off them:
 
 ```ts
-import { film, FILM_DEFAULTS } from '@svgfx/postprocessing'
+import { film, FILM_DEFAULTS } from 'pstfx'
 
 FILM_DEFAULTS.bloom              // { radius: 6, threshold: 0.68 }
 film({ bloom: { ...FILM_DEFAULTS.bloom, radius: 20 } })
@@ -244,7 +244,7 @@ film({ bloom: { ...FILM_DEFAULTS.bloom, radius: 20 } })
 ## Examples
 
 Every effect and preset ships as a runnable TypeScript script under
-[`examples/`](https://github.com/tool3/svgfx/tree/master/examples) — the linked name opens the code, which shows the exact
+[`examples/`](https://github.com/tool3/pstfx/tree/master/examples) — the linked name opens the code, which shows the exact
 options used. Each script writes its results into `examples/svgs`, and runs as-is with no
 build step.
 
@@ -254,7 +254,7 @@ node examples/effects/halftone.ts   # or just one
 npm run gallery                     # side-by-side overview page
 ```
 
-Every example runs twice: on still artwork, and on [`tetrahedron.svg`](https://github.com/tool3/svgfx/blob/master/examples/sources/tetrahedron.svg) —
+Every example runs twice: on still artwork, and on [`tetrahedron.svg`](https://github.com/tool3/pstfx/blob/master/examples/sources/tetrahedron.svg) —
 a spinning 3D solid — so you can see each effect hold up on something that moves. The
 animated columns play in place.
 
@@ -262,62 +262,62 @@ animated columns play in place.
 
 | Example | Before | After | Before (animated) | After (animated) |
 | ------- | ------ | ----- | ----------------- | ---------------- |
-| [`blur`](https://github.com/tool3/svgfx/blob/master/examples/effects/blur.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/blur.before.svg" width="180" alt="blur before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/blur.after.svg" width="180" alt="blur after"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/blur.motion.after.svg" width="140" alt="blur on the tetrahedron"> |
-| [`bloom`](https://github.com/tool3/svgfx/blob/master/examples/effects/bloom.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/bloom.before.svg" width="180" alt="bloom before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/bloom.after.svg" width="180" alt="bloom after"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/bloom.motion.after.svg" width="140" alt="bloom on the tetrahedron"> |
-| [`glow`](https://github.com/tool3/svgfx/blob/master/examples/effects/glow.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/glow.before.svg" width="180" alt="glow before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/glow.after.svg" width="180" alt="glow after"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/glow.motion.after.svg" width="140" alt="glow on the tetrahedron"> |
-| [`shadow`](https://github.com/tool3/svgfx/blob/master/examples/effects/shadow.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/shadow.before.svg" width="180" alt="shadow before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/shadow.after.svg" width="180" alt="shadow after"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/shadow.motion.after.svg" width="140" alt="shadow on the tetrahedron"> |
-| [`grayscale`](https://github.com/tool3/svgfx/blob/master/examples/effects/grayscale.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/grayscale.before.svg" width="180" alt="grayscale before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/grayscale.after.svg" width="180" alt="grayscale after"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/grayscale.motion.after.svg" width="140" alt="grayscale on the tetrahedron"> |
-| [`saturate`](https://github.com/tool3/svgfx/blob/master/examples/effects/saturate.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/saturate.before.svg" width="180" alt="saturate before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/saturate.after.svg" width="180" alt="saturate after"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/saturate.motion.after.svg" width="140" alt="saturate on the tetrahedron"> |
-| [`hue-rotate`](https://github.com/tool3/svgfx/blob/master/examples/effects/hue-rotate.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/hue-rotate.before.svg" width="180" alt="hue-rotate before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/hue-rotate.after.svg" width="180" alt="hue-rotate after"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/hue-rotate.motion.after.svg" width="140" alt="hue-rotate on the tetrahedron"> |
-| [`invert`](https://github.com/tool3/svgfx/blob/master/examples/effects/invert.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/invert.before.svg" width="180" alt="invert before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/invert.after.svg" width="180" alt="invert after"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/invert.motion.after.svg" width="140" alt="invert on the tetrahedron"> |
-| [`brightness`](https://github.com/tool3/svgfx/blob/master/examples/effects/brightness.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/brightness.before.svg" width="180" alt="brightness before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/brightness.after.svg" width="180" alt="brightness after"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/brightness.motion.after.svg" width="140" alt="brightness on the tetrahedron"> |
-| [`contrast`](https://github.com/tool3/svgfx/blob/master/examples/effects/contrast.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/contrast.before.svg" width="180" alt="contrast before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/contrast.after.svg" width="180" alt="contrast after"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/contrast.motion.after.svg" width="140" alt="contrast on the tetrahedron"> |
-| [`sepia`](https://github.com/tool3/svgfx/blob/master/examples/effects/sepia.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/sepia.before.svg" width="180" alt="sepia before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/sepia.after.svg" width="180" alt="sepia after"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/sepia.motion.after.svg" width="140" alt="sepia on the tetrahedron"> |
-| [`fade`](https://github.com/tool3/svgfx/blob/master/examples/effects/fade.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/fade.before.svg" width="180" alt="fade before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/fade.after.svg" width="180" alt="fade after"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/fade.motion.after.svg" width="140" alt="fade on the tetrahedron"> |
-| [`posterize`](https://github.com/tool3/svgfx/blob/master/examples/effects/posterize.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/posterize.before.svg" width="180" alt="posterize before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/posterize.after.svg" width="180" alt="posterize after"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/posterize.motion.after.svg" width="140" alt="posterize on the tetrahedron"> |
-| [`threshold`](https://github.com/tool3/svgfx/blob/master/examples/effects/threshold.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/threshold.before.svg" width="180" alt="threshold before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/threshold.after.svg" width="180" alt="threshold after"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/threshold.motion.after.svg" width="140" alt="threshold on the tetrahedron"> |
-| [`duotone`](https://github.com/tool3/svgfx/blob/master/examples/effects/duotone.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/duotone.before.svg" width="180" alt="duotone before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/duotone.after.svg" width="180" alt="duotone after"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/duotone.motion.after.svg" width="140" alt="duotone on the tetrahedron"> |
-| [`tint`](https://github.com/tool3/svgfx/blob/master/examples/effects/tint.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/tint.before.svg" width="180" alt="tint before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/tint.after.svg" width="180" alt="tint after"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/tint.motion.after.svg" width="140" alt="tint on the tetrahedron"> |
-| [`grain`](https://github.com/tool3/svgfx/blob/master/examples/effects/grain.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/grain.before.svg" width="180" alt="grain before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/grain.after.svg" width="180" alt="grain after"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/grain.motion.after.svg" width="140" alt="grain on the tetrahedron"> |
-| [`scanlines`](https://github.com/tool3/svgfx/blob/master/examples/effects/scanlines.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/scanlines.before.svg" width="180" alt="scanlines before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/scanlines.after.svg" width="180" alt="scanlines after"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/scanlines.motion.after.svg" width="140" alt="scanlines on the tetrahedron"> |
-| [`chromatic-aberration`](https://github.com/tool3/svgfx/blob/master/examples/effects/chromatic-aberration.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/chromatic-aberration.before.svg" width="180" alt="chromatic-aberration before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/chromatic-aberration.after.svg" width="180" alt="chromatic-aberration after"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/chromatic-aberration.motion.after.svg" width="140" alt="chromatic-aberration on the tetrahedron"> |
-| [`glitch`](https://github.com/tool3/svgfx/blob/master/examples/effects/glitch.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/glitch.before.svg" width="180" alt="glitch before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/glitch.after.svg" width="180" alt="glitch after"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/glitch.motion.after.svg" width="140" alt="glitch on the tetrahedron"> |
-| [`pixelate`](https://github.com/tool3/svgfx/blob/master/examples/effects/pixelate.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/pixelate.before.svg" width="180" alt="pixelate before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/pixelate.after.svg" width="180" alt="pixelate after"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/pixelate.motion.after.svg" width="140" alt="pixelate on the tetrahedron"> |
-| [`halftone`](https://github.com/tool3/svgfx/blob/master/examples/effects/halftone.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/halftone.before.svg" width="180" alt="halftone before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/halftone.after.svg" width="180" alt="halftone after"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/halftone.motion.after.svg" width="140" alt="halftone on the tetrahedron"> |
-| [`vignette`](https://github.com/tool3/svgfx/blob/master/examples/effects/vignette.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/vignette.before.svg" width="180" alt="vignette before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/vignette.after.svg" width="180" alt="vignette after"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/vignette.motion.after.svg" width="140" alt="vignette on the tetrahedron"> |
-| [`outline`](https://github.com/tool3/svgfx/blob/master/examples/effects/outline.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/outline.before.svg" width="180" alt="outline before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/outline.after.svg" width="180" alt="outline after"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/outline.motion.after.svg" width="140" alt="outline on the tetrahedron"> |
-| [`wave`](https://github.com/tool3/svgfx/blob/master/examples/effects/wave.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/wave.before.svg" width="180" alt="wave before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/wave.after.svg" width="180" alt="wave after"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/wave.motion.after.svg" width="140" alt="wave on the tetrahedron"> |
-| [`emboss`](https://github.com/tool3/svgfx/blob/master/examples/effects/emboss.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/emboss.before.svg" width="180" alt="emboss before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/emboss.after.svg" width="180" alt="emboss after"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/emboss.motion.after.svg" width="140" alt="emboss on the tetrahedron"> |
-| [`sharpen`](https://github.com/tool3/svgfx/blob/master/examples/effects/sharpen.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/sharpen.before.svg" width="180" alt="sharpen before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/sharpen.after.svg" width="180" alt="sharpen after"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/sharpen.motion.after.svg" width="140" alt="sharpen on the tetrahedron"> |
+| [`blur`](https://github.com/tool3/pstfx/blob/master/examples/effects/blur.ts) | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/blur.before.svg" width="180" alt="blur before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/blur.after.svg" width="180" alt="blur after"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/blur.motion.after.svg" width="140" alt="blur on the tetrahedron"> |
+| [`bloom`](https://github.com/tool3/pstfx/blob/master/examples/effects/bloom.ts) | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/bloom.before.svg" width="180" alt="bloom before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/bloom.after.svg" width="180" alt="bloom after"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/bloom.motion.after.svg" width="140" alt="bloom on the tetrahedron"> |
+| [`glow`](https://github.com/tool3/pstfx/blob/master/examples/effects/glow.ts) | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/glow.before.svg" width="180" alt="glow before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/glow.after.svg" width="180" alt="glow after"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/glow.motion.after.svg" width="140" alt="glow on the tetrahedron"> |
+| [`shadow`](https://github.com/tool3/pstfx/blob/master/examples/effects/shadow.ts) | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/shadow.before.svg" width="180" alt="shadow before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/shadow.after.svg" width="180" alt="shadow after"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/shadow.motion.after.svg" width="140" alt="shadow on the tetrahedron"> |
+| [`grayscale`](https://github.com/tool3/pstfx/blob/master/examples/effects/grayscale.ts) | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/grayscale.before.svg" width="180" alt="grayscale before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/grayscale.after.svg" width="180" alt="grayscale after"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/grayscale.motion.after.svg" width="140" alt="grayscale on the tetrahedron"> |
+| [`saturate`](https://github.com/tool3/pstfx/blob/master/examples/effects/saturate.ts) | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/saturate.before.svg" width="180" alt="saturate before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/saturate.after.svg" width="180" alt="saturate after"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/saturate.motion.after.svg" width="140" alt="saturate on the tetrahedron"> |
+| [`hue-rotate`](https://github.com/tool3/pstfx/blob/master/examples/effects/hue-rotate.ts) | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/hue-rotate.before.svg" width="180" alt="hue-rotate before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/hue-rotate.after.svg" width="180" alt="hue-rotate after"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/hue-rotate.motion.after.svg" width="140" alt="hue-rotate on the tetrahedron"> |
+| [`invert`](https://github.com/tool3/pstfx/blob/master/examples/effects/invert.ts) | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/invert.before.svg" width="180" alt="invert before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/invert.after.svg" width="180" alt="invert after"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/invert.motion.after.svg" width="140" alt="invert on the tetrahedron"> |
+| [`brightness`](https://github.com/tool3/pstfx/blob/master/examples/effects/brightness.ts) | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/brightness.before.svg" width="180" alt="brightness before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/brightness.after.svg" width="180" alt="brightness after"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/brightness.motion.after.svg" width="140" alt="brightness on the tetrahedron"> |
+| [`contrast`](https://github.com/tool3/pstfx/blob/master/examples/effects/contrast.ts) | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/contrast.before.svg" width="180" alt="contrast before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/contrast.after.svg" width="180" alt="contrast after"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/contrast.motion.after.svg" width="140" alt="contrast on the tetrahedron"> |
+| [`sepia`](https://github.com/tool3/pstfx/blob/master/examples/effects/sepia.ts) | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/sepia.before.svg" width="180" alt="sepia before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/sepia.after.svg" width="180" alt="sepia after"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/sepia.motion.after.svg" width="140" alt="sepia on the tetrahedron"> |
+| [`fade`](https://github.com/tool3/pstfx/blob/master/examples/effects/fade.ts) | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/fade.before.svg" width="180" alt="fade before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/fade.after.svg" width="180" alt="fade after"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/fade.motion.after.svg" width="140" alt="fade on the tetrahedron"> |
+| [`posterize`](https://github.com/tool3/pstfx/blob/master/examples/effects/posterize.ts) | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/posterize.before.svg" width="180" alt="posterize before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/posterize.after.svg" width="180" alt="posterize after"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/posterize.motion.after.svg" width="140" alt="posterize on the tetrahedron"> |
+| [`threshold`](https://github.com/tool3/pstfx/blob/master/examples/effects/threshold.ts) | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/threshold.before.svg" width="180" alt="threshold before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/threshold.after.svg" width="180" alt="threshold after"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/threshold.motion.after.svg" width="140" alt="threshold on the tetrahedron"> |
+| [`duotone`](https://github.com/tool3/pstfx/blob/master/examples/effects/duotone.ts) | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/duotone.before.svg" width="180" alt="duotone before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/duotone.after.svg" width="180" alt="duotone after"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/duotone.motion.after.svg" width="140" alt="duotone on the tetrahedron"> |
+| [`tint`](https://github.com/tool3/pstfx/blob/master/examples/effects/tint.ts) | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/tint.before.svg" width="180" alt="tint before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/tint.after.svg" width="180" alt="tint after"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/tint.motion.after.svg" width="140" alt="tint on the tetrahedron"> |
+| [`grain`](https://github.com/tool3/pstfx/blob/master/examples/effects/grain.ts) | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/grain.before.svg" width="180" alt="grain before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/grain.after.svg" width="180" alt="grain after"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/grain.motion.after.svg" width="140" alt="grain on the tetrahedron"> |
+| [`scanlines`](https://github.com/tool3/pstfx/blob/master/examples/effects/scanlines.ts) | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/scanlines.before.svg" width="180" alt="scanlines before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/scanlines.after.svg" width="180" alt="scanlines after"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/scanlines.motion.after.svg" width="140" alt="scanlines on the tetrahedron"> |
+| [`chromatic-aberration`](https://github.com/tool3/pstfx/blob/master/examples/effects/chromatic-aberration.ts) | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/chromatic-aberration.before.svg" width="180" alt="chromatic-aberration before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/chromatic-aberration.after.svg" width="180" alt="chromatic-aberration after"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/chromatic-aberration.motion.after.svg" width="140" alt="chromatic-aberration on the tetrahedron"> |
+| [`glitch`](https://github.com/tool3/pstfx/blob/master/examples/effects/glitch.ts) | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/glitch.before.svg" width="180" alt="glitch before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/glitch.after.svg" width="180" alt="glitch after"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/glitch.motion.after.svg" width="140" alt="glitch on the tetrahedron"> |
+| [`pixelate`](https://github.com/tool3/pstfx/blob/master/examples/effects/pixelate.ts) | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/pixelate.before.svg" width="180" alt="pixelate before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/pixelate.after.svg" width="180" alt="pixelate after"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/pixelate.motion.after.svg" width="140" alt="pixelate on the tetrahedron"> |
+| [`halftone`](https://github.com/tool3/pstfx/blob/master/examples/effects/halftone.ts) | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/halftone.before.svg" width="180" alt="halftone before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/halftone.after.svg" width="180" alt="halftone after"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/halftone.motion.after.svg" width="140" alt="halftone on the tetrahedron"> |
+| [`vignette`](https://github.com/tool3/pstfx/blob/master/examples/effects/vignette.ts) | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/vignette.before.svg" width="180" alt="vignette before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/vignette.after.svg" width="180" alt="vignette after"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/vignette.motion.after.svg" width="140" alt="vignette on the tetrahedron"> |
+| [`outline`](https://github.com/tool3/pstfx/blob/master/examples/effects/outline.ts) | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/outline.before.svg" width="180" alt="outline before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/outline.after.svg" width="180" alt="outline after"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/outline.motion.after.svg" width="140" alt="outline on the tetrahedron"> |
+| [`wave`](https://github.com/tool3/pstfx/blob/master/examples/effects/wave.ts) | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/wave.before.svg" width="180" alt="wave before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/wave.after.svg" width="180" alt="wave after"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/wave.motion.after.svg" width="140" alt="wave on the tetrahedron"> |
+| [`emboss`](https://github.com/tool3/pstfx/blob/master/examples/effects/emboss.ts) | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/emboss.before.svg" width="180" alt="emboss before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/emboss.after.svg" width="180" alt="emboss after"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/emboss.motion.after.svg" width="140" alt="emboss on the tetrahedron"> |
+| [`sharpen`](https://github.com/tool3/pstfx/blob/master/examples/effects/sharpen.ts) | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/sharpen.before.svg" width="180" alt="sharpen before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/sharpen.after.svg" width="180" alt="sharpen after"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/sharpen.motion.after.svg" width="140" alt="sharpen on the tetrahedron"> |
 
 ### Preset examples
 
 | Example | Before | After | Before (animated) | After (animated) |
 | ------- | ------ | ----- | ----------------- | ---------------- |
-| [`crt`](https://github.com/tool3/svgfx/blob/master/examples/presets/crt.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/crt.before.svg" width="180" alt="crt before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/crt.after.svg" width="180" alt="crt after"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/crt.motion.after.svg" width="140" alt="crt on the tetrahedron"> |
-| [`cyberpunk`](https://github.com/tool3/svgfx/blob/master/examples/presets/cyberpunk.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/cyberpunk.before.svg" width="180" alt="cyberpunk before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/cyberpunk.after.svg" width="180" alt="cyberpunk after"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/cyberpunk.motion.after.svg" width="140" alt="cyberpunk on the tetrahedron"> |
-| [`film-3d`](https://github.com/tool3/svgfx/blob/master/examples/presets/film-3d.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/film-3d.before.svg" width="180" alt="film-3d before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/film-3d.after.svg" width="180" alt="film-3d after"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/film-3d.motion.after.svg" width="140" alt="film-3d on the tetrahedron"> |
-| [`film`](https://github.com/tool3/svgfx/blob/master/examples/presets/film.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/film.before.svg" width="180" alt="film before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/film.after.svg" width="180" alt="film after"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/film.motion.after.svg" width="140" alt="film on the tetrahedron"> |
-| [`neon`](https://github.com/tool3/svgfx/blob/master/examples/presets/neon.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/neon.before.svg" width="180" alt="neon before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/neon.after.svg" width="180" alt="neon after"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/neon.motion.after.svg" width="140" alt="neon on the tetrahedron"> |
-| [`newsprint`](https://github.com/tool3/svgfx/blob/master/examples/presets/newsprint.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/newsprint.before.svg" width="180" alt="newsprint before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/newsprint.after.svg" width="180" alt="newsprint after"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/newsprint.motion.after.svg" width="140" alt="newsprint on the tetrahedron"> |
-| [`riso`](https://github.com/tool3/svgfx/blob/master/examples/presets/riso.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/riso.before.svg" width="180" alt="riso before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/riso.after.svg" width="180" alt="riso after"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/riso.motion.after.svg" width="140" alt="riso on the tetrahedron"> |
-| [`vhs`](https://github.com/tool3/svgfx/blob/master/examples/presets/vhs.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/vhs.before.svg" width="180" alt="vhs before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/vhs.after.svg" width="180" alt="vhs after"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/vhs.motion.after.svg" width="140" alt="vhs on the tetrahedron"> |
-| [`xerox`](https://github.com/tool3/svgfx/blob/master/examples/presets/xerox.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/xerox.before.svg" width="180" alt="xerox before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/xerox.after.svg" width="180" alt="xerox after"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/xerox.motion.after.svg" width="140" alt="xerox on the tetrahedron"> |
+| [`crt`](https://github.com/tool3/pstfx/blob/master/examples/presets/crt.ts) | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/crt.before.svg" width="180" alt="crt before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/crt.after.svg" width="180" alt="crt after"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/crt.motion.after.svg" width="140" alt="crt on the tetrahedron"> |
+| [`cyberpunk`](https://github.com/tool3/pstfx/blob/master/examples/presets/cyberpunk.ts) | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/cyberpunk.before.svg" width="180" alt="cyberpunk before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/cyberpunk.after.svg" width="180" alt="cyberpunk after"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/cyberpunk.motion.after.svg" width="140" alt="cyberpunk on the tetrahedron"> |
+| [`film-3d`](https://github.com/tool3/pstfx/blob/master/examples/presets/film-3d.ts) | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/film-3d.before.svg" width="180" alt="film-3d before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/film-3d.after.svg" width="180" alt="film-3d after"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/film-3d.motion.after.svg" width="140" alt="film-3d on the tetrahedron"> |
+| [`film`](https://github.com/tool3/pstfx/blob/master/examples/presets/film.ts) | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/film.before.svg" width="180" alt="film before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/film.after.svg" width="180" alt="film after"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/film.motion.after.svg" width="140" alt="film on the tetrahedron"> |
+| [`neon`](https://github.com/tool3/pstfx/blob/master/examples/presets/neon.ts) | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/neon.before.svg" width="180" alt="neon before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/neon.after.svg" width="180" alt="neon after"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/neon.motion.after.svg" width="140" alt="neon on the tetrahedron"> |
+| [`newsprint`](https://github.com/tool3/pstfx/blob/master/examples/presets/newsprint.ts) | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/newsprint.before.svg" width="180" alt="newsprint before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/newsprint.after.svg" width="180" alt="newsprint after"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/newsprint.motion.after.svg" width="140" alt="newsprint on the tetrahedron"> |
+| [`riso`](https://github.com/tool3/pstfx/blob/master/examples/presets/riso.ts) | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/riso.before.svg" width="180" alt="riso before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/riso.after.svg" width="180" alt="riso after"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/riso.motion.after.svg" width="140" alt="riso on the tetrahedron"> |
+| [`vhs`](https://github.com/tool3/pstfx/blob/master/examples/presets/vhs.ts) | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/vhs.before.svg" width="180" alt="vhs before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/vhs.after.svg" width="180" alt="vhs after"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/vhs.motion.after.svg" width="140" alt="vhs on the tetrahedron"> |
+| [`xerox`](https://github.com/tool3/pstfx/blob/master/examples/presets/xerox.ts) | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/xerox.before.svg" width="180" alt="xerox before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/xerox.after.svg" width="180" alt="xerox after"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/sources/tetrahedron.svg" width="140" alt="tetrahedron before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/xerox.motion.after.svg" width="140" alt="xerox on the tetrahedron"> |
 
 ### Animated examples
 
 Applied to `examples/sources/motion.svg`, which loops on its own in plain SMIL. Both
-columns are playing: the source keeps its motion, and the second adds svgfx's on top.
+columns are playing: the source keeps its motion, and the second adds pstfx's on top.
 
 | Example | Before | After |
 | ------- | ------ | ----- |
-| [`motion-crt`](https://github.com/tool3/svgfx/blob/master/examples/animated/preset-over-motion.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/motion-crt.before.svg" width="240" alt="motion-crt before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/motion-crt.after.svg" width="240" alt="motion-crt after"> |
-| [`motion-layered`](https://github.com/tool3/svgfx/blob/master/examples/animated/layered-motion.ts) | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/motion-layered.before.svg" width="240" alt="motion-layered before"> | <img src="https://raw.githubusercontent.com/tool3/svgfx/master/examples/svgs/motion-layered.after.svg" width="240" alt="motion-layered after"> |
+| [`motion-crt`](https://github.com/tool3/pstfx/blob/master/examples/animated/preset-over-motion.ts) | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/motion-crt.before.svg" width="240" alt="motion-crt before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/motion-crt.after.svg" width="240" alt="motion-crt after"> |
+| [`motion-layered`](https://github.com/tool3/pstfx/blob/master/examples/animated/layered-motion.ts) | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/motion-layered.before.svg" width="240" alt="motion-layered before"> | <img src="https://raw.githubusercontent.com/tool3/pstfx/master/examples/svgs/motion-layered.after.svg" width="240" alt="motion-layered after"> |
 
 ## The output keeps your artwork's shape
 
 An SVG with rounded corners should come back with the same rounded corners. Two things
-would otherwise break that, and svgfx handles both.
+would otherwise break that, and pstfx handles both.
 
 **Overlays.** `scanlines`, `vignette` and `halftone` lay something *over* the drawing,
 and a naive overlay is a rectangle that paints straight over your corners.
@@ -326,7 +326,7 @@ and a naive overlay is a rectangle that paints straight over your corners.
 design. On a rounded card that bleed lands outside the corner arc as a soft halo and
 colour fringing, so the silhouette stops being yours.
 
-So svgfx works out the shape your artwork actually has, and holds everything to it:
+So pstfx works out the shape your artwork actually has, and holds everything to it:
 
 1. **A frame it can measure.** If your artwork sits on a full-bleed backdrop — a
    `<rect>` filling the viewBox, rounded or not, however deeply nested in groups — that
@@ -341,14 +341,14 @@ Measured on a rounded terminal card with the `crt` preset: without this, 1853 pi
 the silhouette differ from the input. With it, 2 — both antialiasing on the arc.
 
 ```ts
-svgfx(roundedCard, [crt()])
+pstfx(roundedCard, [crt()])
 ```
 
 Two escape hatches, at different levels:
 
 ```ts
-svgfx(source, [scanlines({ clip: 'viewport' })])   // this overlay fills the frame
-svgfx(source, [glow()], { clip: 'none' })          // let everything spill past the frame
+pstfx(source, [scanlines({ clip: 'viewport' })])   // this overlay fills the frame
+pstfx(source, [glow()], { clip: 'none' })          // let everything spill past the frame
 ```
 
 The measured-frame path is free — one `clipPath`, shared by every effect that needs it.
@@ -361,13 +361,13 @@ keyframes into the output. Nothing is attached at runtime, so the file animates 
 own — as an `<img src>`, a CSS `background-image`, or inlined in a page.
 
 ```ts
-const banner = svgfx(source, [scanlines({ animate: true, speed: 4 }), grain({ animate: true })])
+const banner = pstfx(source, [scanlines({ animate: true, speed: 4 }), grain({ animate: true })])
 ```
 
 Turn all of it off in one place when you need a still frame:
 
 ```ts
-svgfx(source, [crt({ animate: true })], { animate: false })
+pstfx(source, [crt({ animate: true })], { animate: false })
 ```
 
 ### Animated SVGs go in, animated SVGs come out
@@ -377,13 +377,13 @@ An input that already animates keeps animating. `<animate>`, `<animateTransform>
 wrapped, never rewritten — and the effect is applied to every frame as it plays.
 
 ```ts
-const styled = svgfx(spinner, [crt()])
+const styled = pstfx(spinner, [crt()])
 ```
 
-Your motion and svgfx's motion compose, in one self-contained file:
+Your motion and pstfx's motion compose, in one self-contained file:
 
 ```ts
-const banner = svgfx(spinner, [
+const banner = pstfx(spinner, [
   bloom({ radius: 6, threshold: 0.45 }),
   glitch({ intensity: 0.6, animate: true }),
   scanlines({ gap: 3, animate: true }),
@@ -401,7 +401,7 @@ into a single `<filter>` element automatically. A **layer stage** restructures t
 artwork — wrapping it, duplicating it, or laying something over it.
 
 ```ts
-import { defineEffect, filterStage, series } from '@svgfx/postprocessing'
+import { defineEffect, filterStage, series } from 'pstfx'
 
 export const solarize = ({ level = 0.5 } = {}) =>
   defineEffect('solarize', [
@@ -425,7 +425,7 @@ A layer stage receives the current artwork and returns the new artwork, plus any
 it needs in `<defs>` or in a `<style>` block:
 
 ```ts
-import { cover, defineEffect, group, layerStage } from '@svgfx/postprocessing'
+import { cover, defineEffect, group, layerStage } from 'pstfx'
 
 export const wash = ({ color = '#ff2d55' } = {}) =>
   defineEffect('wash', [
@@ -445,10 +445,10 @@ Randomness is keyed rather than sequential, which is what keeps output byte-stab
 
 ```tsx
 import { useMemo } from 'react'
-import { svgfx, crt } from '@svgfx/postprocessing'
+import { pstfx, crt } from 'pstfx'
 
 const Poster = ({ svg }: { svg: string }) => {
-  const html = useMemo(() => svgfx(svg, [crt()]), [svg])
+  const html = useMemo(() => pstfx(svg, [crt()]), [svg])
   return <div dangerouslySetInnerHTML={{ __html: html }} />
 }
 ```
@@ -457,7 +457,7 @@ const Poster = ({ svg }: { svg: string }) => {
 
 ```js
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs'
-import { createPipeline, duotone, grain } from '@svgfx/postprocessing'
+import { createPipeline, duotone, grain } from 'pstfx'
 
 const brand = createPipeline([duotone(), grain()], { format: 'minify' })
 
@@ -469,7 +469,7 @@ readdirSync('icons').forEach((file) => {
 **In the browser**
 
 ```ts
-const styled = svgfx(await fetch('/logo.svg').then((response) => response.text()), [neon()])
+const styled = pstfx(await fetch('/logo.svg').then((response) => response.text()), [neon()])
 document.querySelector('#logo')!.innerHTML = styled
 ```
 
@@ -481,7 +481,7 @@ document.querySelector('#logo')!.innerHTML = styled
 - **Resolution.** Browsers rasterize filter regions at the SVG's own coordinate scale.
   If a filtered SVG is displayed much larger than its `viewBox`, the filtered parts can
   soften. Author at the size you intend to display, or scale the `viewBox` up.
-- **Ids.** Generated ids are namespaced per document, so several svgfx outputs can live
+- **Ids.** Generated ids are namespaced per document, so several pstfx outputs can live
   in one page. Pass `scope` if you want to name that namespace yourself.
 - **Structure.** Non-rendering nodes — `<title>`, `<desc>`, `<defs>`, `<style>`,
   `<metadata>` — are left where they are. Only the drawn content is wrapped.

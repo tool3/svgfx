@@ -1,4 +1,4 @@
-import { svgfx, brightness } from '../../src/index.ts'
+import { pstfx, brightness } from '../../src/index.ts'
 import { render } from '../support.ts'
 
-render('brightness', 'scene.svg', (source) => svgfx(source, [brightness({ amount: 1.35 })]))
+render('brightness', 'scene.svg', (source) => pstfx(source, [brightness({ amount: 1.35 })]))

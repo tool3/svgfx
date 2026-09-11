@@ -38,10 +38,10 @@ jobs:
         id: version
         run: echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
 
-      - name: Trigger svgfx-cli update
+      - name: Trigger pstfx-cli update
         uses: peter-evans/repository-dispatch@v4
         with:
           token: ${{ secrets.REPO_DISPATCH_TOKEN }}
-          repository: tool3/svgfx-cli
+          repository: tool3/pstfx-cli
           event-type: dependency-update
-          client-payload: '{"package": "@svgfx/postprocessing", "version": "${{ steps.version.outputs.version }}"}'
+          client-payload: '{"package": "pstfx", "version": "${{ steps.version.outputs.version }}"}'

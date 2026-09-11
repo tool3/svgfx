@@ -1,4 +1,4 @@
-import { svgfx, emboss } from '../../src/index.ts'
+import { pstfx, emboss } from '../../src/index.ts'
 import { render } from '../support.ts'
 
-render('emboss', 'mark.svg', (source) => svgfx(source, [emboss({ depth: 1.4 })]))
+render('emboss', 'mark.svg', (source) => pstfx(source, [emboss({ depth: 1.4 })]))

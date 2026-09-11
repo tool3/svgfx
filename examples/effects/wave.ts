@@ -1,4 +1,4 @@
-import { svgfx, wave } from '../../src/index.ts'
+import { pstfx, wave } from '../../src/index.ts'
 import { render } from '../support.ts'
 
-render('wave', 'mark.svg', (source) => svgfx(source, [wave({ amplitude: 16, frequency: 0.03 })]))
+render('wave', 'mark.svg', (source) => pstfx(source, [wave({ amplitude: 16, frequency: 0.03 })]))

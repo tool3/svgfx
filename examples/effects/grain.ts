@@ -1,4 +1,4 @@
-import { svgfx, grain } from '../../src/index.ts'
+import { pstfx, grain } from '../../src/index.ts'
 import { render } from '../support.ts'
 
-render('grain', 'scene.svg', (source) => svgfx(source, [grain({ amount: 0.5 })]))
+render('grain', 'scene.svg', (source) => pstfx(source, [grain({ amount: 0.5 })]))

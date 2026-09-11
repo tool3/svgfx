@@ -1,4 +1,4 @@
-import { svgfx, saturate } from '../../src/index.ts'
+import { pstfx, saturate } from '../../src/index.ts'
 import { render } from '../support.ts'
 
-render('saturate', 'scene.svg', (source) => svgfx(source, [saturate({ amount: 2.2 })]))
+render('saturate', 'scene.svg', (source) => pstfx(source, [saturate({ amount: 2.2 })]))

@@ -1,7 +1,7 @@
 import { writeFileSync } from 'fs';
 import gradient from 'gradient-string';
 import { shellfie } from 'shellfie';
-import { svgfx, crt, grain } from '../src/index.ts'
+import { pstfx, crt, grain } from '../src/index.ts'
 
 const logo = `
 ▄▄▄▄▄▄▄▄▄▄▄▄▄▄ ▄▄▄▄▄    ▄▄▄▄▄ ▄▄▄▄▄▄▄▄▄▄▄▄▄▄ ▄▄▄▄▄▄▄▄▄▄▄▄▄▄ ▄▄▄▄▄    ▄▄▄▄▄
@@ -30,6 +30,6 @@ const logo = `
 // `
 
 const coloredLogo = gradient('#fc00ff', '#00dbde').multiline(logo);
-const logos = shellfie(coloredLogo, { title: '@svgfx/pop' });
-const stylized = svgfx(logos, [crt({ animate: true }), grain({ animate: true })])
+const logos = shellfie(coloredLogo, { title: '@pstfx/pop' });
+const stylized = pstfx(logos, [crt({ animate: true }), grain({ animate: true })])
 writeFileSync('logo.svg', stylized, { encoding: 'utf-8' });

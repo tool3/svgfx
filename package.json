@@ -1,5 +1,5 @@
 {
-  "name": "@svgfx/postprocessing",
+  "name": "pstfx",
   "version": "0.6.0",
   "description": "Post-processing effects for any SVG. Scanlines, bloom, glitch, halftone and more — in, out, still an SVG.",
   "keywords": [
@@ -18,17 +18,14 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tool3/svgfx.git"
+    "url": "https://github.com/tool3/pstfx.git"
   },
   "bugs": {
-    "url": "https://github.com/tool3/svgfx/issues"
+    "url": "https://github.com/tool3/pstfx/issues"
   },
-  "homepage": "https://github.com/tool3/svgfx#readme",
+  "homepage": "https://github.com/tool3/pstfx#readme",
   "author": "Tal Hayut",
   "type": "module",
-  "publishConfig": {
-    "access": "public"
-  },
   "sideEffects": false,
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",

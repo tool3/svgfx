@@ -1,4 +1,4 @@
-import { svgfx, pixelate } from '../../src/index.ts'
+import { pstfx, pixelate } from '../../src/index.ts'
 import { render } from '../support.ts'
 
-render('pixelate', 'mark.svg', (source) => svgfx(source, [pixelate({ size: 10 })]))
+render('pixelate', 'mark.svg', (source) => pstfx(source, [pixelate({ size: 10 })]))

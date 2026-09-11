@@ -2,7 +2,7 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import { parse } from '../src/core/parse.ts'
 import { serialize } from '../src/core/serialize.ts'
-import { SvgfxError } from '../src/core/errors.ts'
+import { PstfxError } from '../src/core/errors.ts'
 import type { SvgElement } from '../src/core/types.ts'
 
 const roundTrip = (source: string): string => serialize(parse(source))
@@ -60,13 +60,13 @@ test('recovers from an unclosed element', () => {
 })
 
 test('rejects a non-string source', () => {
-  assert.throws(() => parse(42 as unknown as string), (error: SvgfxError) => error.code === 'INVALID_SOURCE')
+  assert.throws(() => parse(42 as unknown as string), (error: PstfxError) => error.code === 'INVALID_SOURCE')
 })
 
 test('rejects an empty source', () => {
-  assert.throws(() => parse('   '), (error: SvgfxError) => error.code === 'INVALID_SOURCE')
+  assert.throws(() => parse('   '), (error: PstfxError) => error.code === 'INVALID_SOURCE')
 })
 
 test('rejects markup whose root is not an svg', () => {
-  assert.throws(() => parse('<div><span/></div>'), (error: SvgfxError) => error.code === 'NOT_AN_SVG')
+  assert.throws(() => parse('<div><span/></div>'), (error: PstfxError) => error.code === 'NOT_AN_SVG')
 })

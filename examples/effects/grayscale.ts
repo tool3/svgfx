@@ -1,4 +1,4 @@
-import { svgfx, grayscale } from '../../src/index.ts'
+import { pstfx, grayscale } from '../../src/index.ts'
 import { render } from '../support.ts'
 
-render('grayscale', 'scene.svg', (source) => svgfx(source, [grayscale()]))
+render('grayscale', 'scene.svg', (source) => pstfx(source, [grayscale()]))
